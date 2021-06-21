@@ -1,3 +1,10 @@
+/*
+*	@filename	MapHelper.js
+*	@author		theBGuy
+*	@desc		MapHelper used in conjuction with MapThread.js
+*	@credits 	kolton for orginal MapHelper
+*/
+
 include("json2.js");
 include("NTItemParser.dbl");
 include("OOG.js");
@@ -55,7 +62,19 @@ function main() {
 				if (obj) {
 					switch (obj.type) {
 					case "area":
-						Pather.moveToExit(obj.dest, true);
+						if (obj.dest === 120) {
+							Pather.moveToExit(obj.dest, false);	
+						} else {
+							Pather.moveToExit(obj.dest, true);
+						}
+
+						if ([38, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+							if (!Pather.getPortal()) {
+								me.overhead("Move closer to exit");
+							}
+
+							Pather.usePortal();
+						}
 
 						break;
 					case "unit":
@@ -73,12 +92,33 @@ function main() {
 							}
 						}
 
+						if ([4, 54, 109, 111, 112, 117, 125, 126, 127].indexOf(me.area) > -1) {
+							Pather.usePortal();
+						}
+
+						if (me.area === 40) {
+							Pather.useUnit(5, 20, 47);
+						}
+
 						break;
 					case "wp":
 						Pather.getWP(me.area);
 
 						break;
 					case "portal":
+						if (obj.dest === 132 && getUnit(1, 543)) {
+							me.overhead("Can't enter Worldstone Chamber yet. Baal still in area");
+							break;
+						} else if (obj.dest === 132 && !getUnit(1, 543)) {
+							let portal = getUnit(2, 563);
+
+							if (portal) {
+								Pather.usePortal(null, null, portal);
+							}
+
+							break;
+						}
+
 						Pather.usePortal(obj.dest);
 
 						break;

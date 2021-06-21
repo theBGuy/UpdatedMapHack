@@ -1,8 +1,19 @@
+/*
+*	@filename	MapThread.js
+*	@author		theBGuy
+*	@desc		MapThread used with D2BotMap.dbj
+*	@credits 	kolton for orginal MapThread, isidOre for the box/frame style
+*/
+
 var Hooks = {
 	dashboardX: 400,
 	dashboardY: 490,
 	portalX: 12,
 	portalY: 432,
+	statBoxAX: 151,
+	statBoxAY: 520,
+	statBoxBX: 645,
+	statBoxBY: 520,
 	resfixX: me.screensize ? 0 : -85,
 	resfixY: me.screensize ? 0 : -120,
 	upperRightResfixX: me.screensize ? 0 : -160,
@@ -26,7 +37,6 @@ var Hooks = {
 			for (i = 0; i < this.hooks.length; i += 1) {
 				if (!copyUnit(this.hooks[i].item).x) {
 					for (let j = 0; j < this.hooks[i].hook.length; j++) {
-						print(this.hooks[i].hook.length);
 						this.hooks[i].hook[j].remove();
 					}
 
@@ -41,7 +51,7 @@ var Hooks = {
 
 			if (item) {
 				do {
-					if ((item.mode === 3 || item.mode === 5) && (item.quality >= 5 || (item.quality === 4 && [58, 82].indexOf(item.itemType) > -1) || item.itemType === 74)) {
+					if ((item.mode === 3 || item.mode === 5) && (item.quality >= 5 || (item.quality === 4 && [58, 82].indexOf(item.itemType) > -1) || [39, 74].indexOf(item.itemType) > -1)) {
 						if (!this.getHook(item)) {
 							this.add(item);
 						}
@@ -68,155 +78,478 @@ var Hooks = {
 			// White: ÿc0, Red: ÿc1, Light Green: ÿc2, Blue: ÿc3, Gold: ÿc4, Gray: ÿc5, Black: ÿc6, Lighter Gold?: ÿc7, Orange: ÿc8, Tan?: ÿc9, Dark Green: ÿc:, Purple: ÿc;, Green: ÿc<"
 
 			switch (item.quality) {
-			case 2: 	// Runes
-				if (item.classid >= 635) {
-					color = 0x9B;
-					code = "ÿc;HR";
-				} else if (item.classid >= 626) {
-					color = 0x9A;
-					code = "ÿc8MR";
-				} else {
-					color = 0xA1;
-					code = "LR";
-				}
+			case 2:
+				switch (item.itemType) {
+				case 39:
+					switch (item.classid) {
+					case 644:
+					case 645:
+					case 646:
+					case 647:
+					case 648:
+					case 649:
+					case 650:
+					case 651:
+					case 652:
+						color = 0x9A;
+						code = "ÿc8" + item.fname;
 
-				//arr.push(new Image("d2bs\\kolbot\\images\\expansion.png", item.x, item.y, color, 2, true));
+						break;
+					case 653:
+						color = 0x9A;
+						code = "ÿc8Token";
+						break;
+					case 654:
+						color = 0x9A;
+						code = "ÿc3Ess-Of-Suffering";
+						break;
+					case 655:
+						color = 0x9A;
+						code = "ÿc7Ess-Of-Hatred";
+						break;
+					case 656:
+						color = 0x9A;
+						code = "ÿc1Ess-Of-Terror";
+						break;
+					case 657:
+						color = 0x9A;
+						code = "ÿc3Ess-Of-Destruction";
+						break;
+					}
+
+					name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+
+					break;
+				case 74:
+					if (item.classid >= 635) {
+						color = 0x9B;
+						code = "ÿc;";
+					} else if (item.classid >= 626) {
+						color = 0x9A;
+						code = "ÿc8";
+					} else {
+						color = 0xA1;
+						code = "";
+					}
+
+					name.push(new Text(code + item.fname, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+
+					break	
+				}
 
 				break;
 			case 4: 	// Magic
 				color = 0x97;
-				code = "ÿc3MAG";
+				code = "ÿc3" + item.name + "(" + item.ilvl + ")";
+
+				name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
 				break;
 			case 5: 	// Set
-				color = 0x84;
-				code = "ÿc2S-";
-				/*switch (unit.classid) {
-				case 27: // Angelic sabre
-					code += "Ang";
+			case 7: 	// Unique
+				if (item.quality === 5) {
+					color = 0x84;
+					code = "ÿc2";	
+				}
+				
+				if (item.quality === 7) {
+					color = 0xA8;
+					code = "ÿc4";	
+				}
 
+				switch (item.classid) {
+				//Uniques
+				case 603:
+					code += item.quality === 5 ? "" : "Annihilus";
 					break;
-				case 74: // Arctic short war bow
-					code = "invswbu";
+				case 604:
+					code += item.quality === 5 ? "" : "Hellfire Torch";
+					break;
+				case 605:
+					code += item.quality === 5 ? "" : "Gheed's";
+					break;
+				case 643:
+					code += item.quality === 5 ? "" : "Facet";
+					break;
+				case 522: 	// Amulet's
+				case 520: 	// Ring's
+					code += item.name + "(" + item.ilvl + ")";
+					
+					break;
+				case 432:
+					code += item.quality === 5 ? "" : "Gladiator's Bane";
+					break;
+				case 300:
+					code += item.quality === 5 ? "" : "Death's Fathom";
+					break;
+				case 297:
+					code += item.quality === 5 ? "" : "Eschuta's";
+					break;
+				case 477:
+					code += item.quality === 5 ? "" : "Arreat's Face";
+					break;
+				case 495:
+					code += item.quality === 5 ? "" : "Demonhorn's";
+					break;
+				case 496:
+					code += item.quality === 5 ? "" : "Halaberd's";
+					break;
+				case 494:
+					code += item.quality === 5 ? "" : "Wolfhowl";
+					break;
+				case 472:
+					code += item.quality === 5 ? "" : "Jalal's";
+					break;
+				case 488:
+					code += item.quality === 5 ? "" : "Cerebus";
+					break;
+				case 490:
+					code += item.quality === 5 ? "" : "Spirit Keeper";
+					break;
+				case 481:
+					code += item.quality === 5 ? "" : "HoZ";
+					break;
+				case 499:
+					code += item.quality === 5 ? "" : "Alma Negra";
+					break;
+				case 501:
+					code += item.quality === 5 ? "" : "Dragonscale";
+					break;
+				case 292:
+					code += item.quality === 5 ? "" : "Lycander's Aim";
+					break;
+				case 295:
+					code += item.quality === 5 ? "" : "Titan's Revenge";
+					break;
+				case 294:
+					code += item.quality === 5 ? "" : "Lycander's Pike";
+					break;
+				case 301:
+					code += item.quality === 5 ? "" : "Bloodraven's";
+					break;
+				case 305:
+					code += item.quality === 5 ? "" : "T-Stroke";
+					break;
+				case 303:
+					code += item.quality === 5 ? "" : "Stoneraven";
+					break;
+				case 187:
+					code += item.quality === 5 ? "" : "Bartuc's";
+					break;
+				case 193:
+					code += item.quality === 5 ? "" : "Firelizard's";
+					break;
+				case 190:
+					code += item.quality === 5 ? "" : "Jade Talon";
+					break;
+				case 192:
+					code += item.quality === 5 ? "" : "Shadow Killer";
+					break;
+				case 487:
+					code += item.quality === 5 ? "" : "Homunculus";
+					break;
+				case 506:
+					code += item.quality === 5 ? "" : "Boneflame";
+					break;
+				case 507:
+					code += item.quality === 5 ? "" : "Darkforce";
+					break;
+				case 417:
+					code += item.quality === 5 ? "" : "Andariel's";
+					break;
+				case 426:
+					code += item.quality === 5 ? "" : "Nightwing's";
+					break;
+				case 507:
+					code += item.quality === 5 ? "" : "Darkforce";
+					break;
+				case 422:
+					code += item.quality === 5 ? "" : "Shako";
+					break;
+				case 353:
+					code += item.quality === 5 ? "" : "Rockstopper";
+					break;
+				case 352:
+					code += item.quality === 5 ? "" : "Peasant Crown";
+					break;
+				case 258:
+					code += item.quality === 5 ? "" : "Stormspire";
+					break;
+				case 256:
+					code += item.quality === 5 ? "" : "Tomb Reaver";
+					break;
+				case 255:
+					code += item.quality === 5 ? "" : "Reaper's Toll";
+					break;
+				case 198:
+					code += item.quality === 5 ? "" : "Rune Master";
+					break;
+				case 271:
+					code += item.quality === 5 ? "" : "Windforce";
+					break;
+				case 270:
+					code += item.quality === 5 ? "" : "Ward Bow";
+					break;
+				case 269:
+					code += item.quality === 5 ? "" : "Eaglehorn";
+					break;
+				case 263:
+					code += item.quality === 5 ? "" : "Mang Song's";
+					break;
+				case 420:
+					code += item.quality === 5 ? "" : "Kira's";
+					break;
+				case 457:
+					code += item.quality === 5 ? "" : "Marrowwalk";
+					break;
+				case 459:
+					code += item.quality === 5 ? "" : "Shadow Dancer";
+					break;
+				case 456:
+					code += item.quality === 5 ? "" : "Sandstorm Trek's";
+					break;
+				case 386:
+					code += item.quality === 5 ? "" : "Waterwalk";
+					break;
+				case 342:
+					code += item.quality === 5 ? "" : "Goblin Toe";
+					break;
+				case 373:
+					code += item.quality === 5 ? "" : "Que-Hegan's";
+					break;
+				case 367:
+					code += item.quality === 5 ? "" : "Skullder's";
+					break;
+				case 365:
+					code += item.quality === 5 ? "" : "Shaftstop";
+					break;
+				case 366:
+					code += item.quality === 5 ? "" : "Duriel's Shell";
+					break;
+				case 360:
+					code += item.quality === 5 ? "" : "Vipermagi's";
+					break;
+				case 359:
+					code += item.quality === 5 ? "" : "Spirit Shroud";
+					break;
+				//Set Items/Uniques
+				case 290:
+					code += item.quality === 5 ? "Tal Orb" : "Occulus";
+					break;
+				case 490:
+					code += item.quality === 5 ? "Tal Armor" : "";
+					break;
+				case 358:
+					code += item.quality === 5 ? "Tal Helm" : "Blackhorn's";
+					break;
+				case 392:
+					code += item.quality === 5 ? "Tal Belt" : "Gloom's Trap";
+					break;
+				case 465:
+					code += item.quality === 5 ? "Trang Helm" : "Giant Skull";
+					break;
+				case 371:
+					code += item.quality === 5 ? "Trang Armor" : "Black Hades";
+					break;
+				case 463:
+					code += item.quality === 5 ? "Trang Belt" : "";
+					break;
+				case 382:
+					code += item.quality === 5 ? "Trang Gloves" : "Ghoulhide";
+					break;
+				case 486:
+					code += item.quality === 5 ? "Trang Shield" : "";
+					break;
+				case 219:
+					code += item.quality === 5 ? "IK Maul" : "Windhammer";
+					break;
+				case 407:
+					code += item.quality === 5 ? "IK Helm" : "";
+					break;
+				case 442:
+					code += item.quality === 5 ? "IK Armor" : item.ilvl === 87 ? "Tyrael's Might" : "Templar's Might";
+					break;
+				case 384:
+					code += item.quality === 5 ? "IK Gloves" : "HellMouth";
+					break;
+				case 389:
+					code += item.quality === 5 ? "IK Boots" : "Gore Rider";
+					break;
+				case 113:
+					code += item.quality === 5 ? "Aldur's Wep" : "Moonfall";
+					break;
+				case 470:
+					code += item.quality === 5 ? "Aldur's Helm" : "";
+					break;
+				case 441:
+					code += item.quality === 5 ? "Aldur's Armor" : "Steel Carapace";
+					break;
+				case 113:
+					code += item.quality === 5 ? "Aldur's Boots" : "War Trav's";
+					break;
+				case 213:
+					code += item.quality === 5 ? "Griswold's Wep" : "Moonfall";
+					break;
+				case 427:
+					code += item.quality === 5 ? "Griswold's Helm" : "CoA";
+					break;
+				case 372:
+					code += item.quality === 5 ? "Griswold's Armor" : "Corpsemourn";
+					break;
+				case 502:
+					code += item.quality === 5 ? "Griswold's Shield" : "";
+					break;
+				case 429:
+					code += item.quality === 5 ? "Disciple's Armor" : "Ormus Robe's";
+					break;
+				case 462:
+					code += item.quality === 5 ? "Disciple's Belt" : "Verdungo's";
+					break;
+				case 450:
+					code += item.quality === 5 ? "Disciple's Gloves" : "";
+					break;
+				case 385:
+					code += item.quality === 5 ? "Disciple's Boots" : "Infernostride";
+					break;
+				case 418:
+					code += item.quality === 5 ? "Naj's Helm" : "";
+					break;
+				case 438:
+					code += item.quality === 5 ? "Naj's Armor" : "";
+					break;
+				case 261:
+					code += item.quality === 5 ? "Naj's Staff" : "Ondal's";
+					break;
+				case 418:
+					code += item.quality === 5 ? "Naj's Helm" : "Moonfall";
+					break;
+				case 418:
+					code += item.quality === 5 ? "Mavina's Bow" : "";
+					break;
+				case 439:
+					code += item.quality === 5 ? "Mavina's Armor" : "Leviathan";
+					break;
+				case 421:
+					code += item.quality === 5 ? "Mavina's Helm" : "Griffon's Eye";
+					break;
+				case 391:
+					code += item.quality === 5 ? "Mavina's Belt" : "Razortail";
+					break;
+				case 383:
+					code += item.quality === 5 ? "Mavina's Gloves" : "Lava Gout";
+					break;
+				case 329:
+					code += item.quality === 5 ? "Orphan's Shield" : "Umbral Disk";
+					break;
+				case 356:
+					code += item.quality === 5 ? "G-Face" : "Valk Wing";
+					break;
+				case 347:
+					code += item.quality === 5 ? "Orphan's Belt" : "Snowclash";
+					break;
+				case 335:
+					code += item.quality === 5 ? "Orphan's Gloves" : "Bloodfist";
+					break;
+				case 181:
+					code += item.quality === 5 ? "Natalya's Wep" : "";
+					break;
+				case 434:
+					code += item.quality === 5 ? "Natalya's Armor" : "";
+					break;
+				case 395:
+					code += item.quality === 5 ? "Natalya's Helm" : "Vamp Gaze";
+					break;
+				case 387:
+					code += item.quality === 5 ? "Natalya's Boots" : "Silkweave";
+					break;
+				case 227:
+					code += item.quality === 5 ? "Sazabi's Wep" : "Frostwind";
+					break;
+				case 437:
+					code += item.quality === 5 ? "Sazabi's Armor" : "Arkaine's";
+					break;
+				case 19:
+					code += item.quality === 5 ? "Heavens's Wep" : "Crushflange";
+					break;
+				case 320:
+					code += item.quality === 5 ? item.name : "Venom Ward";
+					break;
+				case 333:
+					code += item.quality === 5 ? "Heavens's Shield" : "The Ward";
+					break;
+				case 310:
+					code += item.quality === 5 ? "Heavens's Helm" : "Howltusk";
+					break;
+				case 317:
+					code += item.quality === 5 ? "Angelic's Armor" : "Darkglow";
+					break;
+				case 27:
+					code += item.quality === 5 ? "Angelic's Wep" : "Krintiz";
+					break;
+				case 307:
+					code += item.quality === 5 ? "Arcanna's Helm" : "Tarnhelm";
+					break;
+				case 327:
+					code += item.quality === 5 ? "Arcanna's Armor" : "Heavenly Garb";
+					break;
+				case 67:
+					code += item.quality === 5 ? "Arcanna's Staff" : "Iron Jang Bong";
+					break;
+				case 337:
+					code += item.quality === 5 ? "Artic's Gloves" : "Magefist";
+					break;
+				case 345:
+					code += item.quality === 5 ? "Artic's Belt" : "Snakecord";
+					break;
+				case 313:
+					code += item.quality === 5 ? "Artic's Armor" : "Greyform";
+					break;
+				case 74:
+					code += item.quality === 5 ? "Artic's Bow" : "Hellclap";
+					break;
+				case 2:
+					code += item.quality === 5 ? "Beserker's Wep" : "Bladebone";
+					break;
+				case 321:
+					code += item.quality === 5 ? "Beserker's Armor" : "Iceblink";
+					break;
+				case 308:
+					code += item.quality === 5 ? "Beserker's Helm" : "Coif of Glory";
+					break;
+				case 234:
+					code += item.quality === 5 ? "Bul-Kathos' Blade" : "Grandfather";
+					break;
+				case 228:
+					code += item.quality === 5 ? "Bul-Kathos' Sword" : "";
+					break;
+				case 151:
+					code += item.quality === 5 ? "Hwanin's Bill" : "Blackleach";
+					break;
+				case 364:
+					code += item.quality === 5 ? "Hwanin's Armor" : "Crow Caw";
+					break;
+				case 357:
+					code += item.quality === 5 ? "Hwanin's Helm" : "Crown of Thieves";
+					break;
+				case 346:
+					code += item.quality === 5 ? item.name : "Nightsmoke";
+					break;
+				default:
+					code += item.name;
+					break;
+				}
 
-					break;
-				case 308: // Berserker's helm
-					code = "invhlmu";
-
-					break;
-				case 330: // Civerb's large shield
-					code = "invlrgu";
-
-					break;
-				case 31: // Cleglaw's long sword
-				case 227: // Szabi's cryptic sword
-					code = "invlsdu";
-
-					break;
-				case 329: // Cleglaw's small shield
-					code = "invsmlu";
-
-					break;
-				case 328: // Hsaru's buckler
-					code = "invbucu";
-
-					break;
-				case 306: // Infernal cap / Sander's cap
-					code = "invcapu";
-
-					break;
-				case 30: // Isenhart's broad sword
-					code = "invbsdu";
-
-					break;
-				case 309: // Isenhart's full helm
-					code = "invfhlu";
-
-					break;
-				case 333: // Isenhart's gothic shield
-					code = "invgtsu";
-
-					break;
-				case 326: // Milabrega's ancient armor
-				case 442: // Immortal King's sacred armor
-					code = "invaaru";
-
-					break;
-				case 331: // Milabrega's kite shield
-					code = "invkitu";
-
-					break;
-				case 332: // Sigon's tower shield
-					code = "invtowu";
-
-					break;
-				case 325: // Tancred's full plate mail
-					code = "invfulu";
-
-					break;
-				case 3: // Tancred's military pick
-					code = "invmpiu";
-
-					break;
-				case 113: // Aldur's jagged star
-					code = "invmstu";
-
-					break;
-				case 234: // Bul-Kathos' colossus blade
-					code = "invgsdu";
-
-					break;
-				case 372: // Grizwold's ornate plate
-					code = "invxaru";
-
-					break;
-				case 366: // Heaven's cuirass
-				case 215: // Heaven's reinforced mace
-				case 449: // Heaven's ward
-				case 426: // Heaven's spired helm
-					code = "inv" + unit.code + "s";
-
-					break;
-				case 357: // Hwanin's grand crown
-					code = "invxrnu";
-
-					break;
-				case 195: // Nalya's scissors suwayyah
-					code = "invskru";
-
-					break;
-				case 395: // Nalya's grim helm
-				case 465: // Trang-Oul's bone visage
-					code = "invbhmu";
-
-					break;
-				case 261: // Naj's elder staff
-					code = "invcstu";
-
-					break;
-				case 375: // Orphan's round shield
-					code = "invxmlu";
-
-					break;
-				case 12: // Sander's bone wand
-					code = "invbwnu";
-
-					break;
-				}*/
-				//arr.push(new Line(item.x - 3, item.y, item.x + 3, item.y, color, true));
-				//arr.push(new Line(item.x - 3, item.y, item.x, item.y + 3, color, true));
-				//arr.push(new Line(item.x + 3, item.y, item.x, item.y + 3, color, true));
+				name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+	
 				break;
 			case 6: 	// Rare
 				color = 0x6F;
-				code = "ÿc9R" + item.ilvl;
-				break;
-			case 7: 	// Unique
-				color = 0xA8;
-				code = "ÿc4UNQ";
+				code = "ÿc9" + item.name + "(" + item.ilvl + ")";
+
+				name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+
 				break;
 			}
 
-			name.push(new Text(code, item.x, item.y, color, 0, 2, true));
 			vector.push(new Line(me.x, me.y, item.x, item.y, color, true));
 
 			arr.push(new Line(item.x - 3, item.y, item.x + 3, item.y, color, true));
@@ -555,6 +888,157 @@ var Hooks = {
 	text: {
 		hooks: [],
 		enabled: true,
+		frameYSizeScale: 0,
+		frameYLocScale: 0,
+
+		getScale: function () {
+			switch (me.area) {
+			case 1:
+			case 75:
+			case 103:
+			case 8:
+			case 9:
+			case 12:
+			case 13:
+			case 14:
+			case 16:
+			case 18:
+			case 19:
+			case 20:
+			case 21:
+			case 22:
+			case 23:
+			case 24:
+			case 25:
+			case 26:
+			case 30:
+			case 31:
+			case 33:
+			case 34:
+			case 36:
+			case 37:
+			case 38:
+			case 45:
+			case 46:
+			case 48:
+			case 49:
+			case 50:
+			case 51:
+			case 53:
+			case 54:
+			case 55:
+			case 56:
+			case 58:
+			case 60:
+			case 61:
+			case 62:
+			case 63:
+			case 64:
+			case 65:
+			case 66:
+			case 67:
+			case 68:
+			case 69:
+			case 70:
+			case 71:
+			case 72:
+			case 73:
+			case 74:
+			case 82:
+			case 84:
+			case 85:
+			case 86:
+			case 87:
+			case 88:
+			case 89:
+			case 90:
+			case 91:
+			case 94:
+			case 95:
+			case 96:
+			case 97:
+			case 98:
+			case 99:
+			case 100:
+			case 102:
+			case 104:
+			case 114:
+			case 116:
+			case 119:
+			case 120:
+			case 121:
+			case 122:
+			case 124:
+			case 125:
+			case 126:
+			case 127:
+			case 128:
+			case 130:
+			case 132:
+			case 133:
+			case 134:
+			case 135:
+			case 136:
+				this.frameYSizeScale = -30;
+				this.frameYLocScale = 30;
+				break;
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 40:
+			case 42:
+			case 43:
+			case 44:
+			case 76:
+			case 78:
+			case 80:
+			case 81:
+			case 83:
+			case 107:
+			case 111:
+			case 112:
+			case 113:
+			case 117:
+			case 118:
+				this.frameYSizeScale = -10;
+				this.frameYLocScale = 10;
+				break;
+			case 2:
+			case 7:
+			case 10:
+			case 18:
+			case 27:
+			case 28:
+			case 29:
+			case 32:
+			case 35:
+			case 41:
+			case 47:
+			case 52:
+			case 57:
+			case 59:
+			case 77:
+			case 79:
+			case 92:
+			case 93:
+			case 101:
+			case 105:
+			case 106:
+			case 109:
+			case 110:
+			case 123:
+			case 129:
+			case 131:
+				this.frameYSizeScale = -20;
+				this.frameYLocScale = 20;
+				break;
+			default:
+				this.frameYSizeScale = 0;
+				this.frameYLocScale = 0;
+			}
+		},
 
 		check: function () {
 			if (!this.enabled) {
@@ -563,12 +1047,46 @@ var Hooks = {
 				return;
 			}
 
+			this.getScale();
+
 			if (!this.getHook("dashboard")) {
 				this.add("dashboard");
 			}
 
 			if (!this.getHook("dashboardframe")) {
 				this.add("dashboardframe");
+			}
+
+			if (!this.getHook("statBoxA")) {
+				this.add("statBoxA");
+			}
+
+			if (!this.getHook("statFrameA")) {
+				this.add("statFrameA");
+			}
+
+			if (!this.getHook("statBoxB")) {
+				this.add("statBoxB");
+			}
+
+			if (!this.getHook("statFrameB")) {
+				this.add("statFrameB");
+			}
+
+			if (!this.getHook("statlineA")) {
+				this.add("statlineA");
+			}
+
+			if (!this.getHook("statlineB")) {
+				this.add("statlineB");
+			}
+
+			if (!this.getHook("statlineC")) {
+				this.add("statlineC");
+			}
+
+			if (!this.getHook("statlineD")) {
+				this.add("statlineD");
 			}
 
 			if (!this.getHook("monsterStatus")) {
@@ -597,6 +1115,44 @@ var Hooks = {
 
 		},
 
+		update: function () {
+			this.getScale();
+
+			this.hooks.push({
+				name: "dashboard",
+				hook: new Box(Hooks.dashboardX + Hooks.resfixX, Hooks.dashboardY + Hooks.resfixY + this.frameYLocScale, 415 + Hooks.dashboardWidthResfixX, 60 + this.frameYSizeScale, 0x0, 1, 2)
+			});
+
+			this.hooks.push({
+				name: "dashboardframe",
+				hook: new Frame(Hooks.dashboardX + Hooks.resfixX, Hooks.dashboardY + Hooks.resfixY + this.frameYLocScale, 415 + Hooks.dashboardWidthResfixX, 60 + this.frameYSizeScale, 2)
+			});
+		},
+
+		getBlock: function () {
+			var shield = false,
+			item = me.getItem(-1, 1);
+
+			// make sure character has shield equipped
+			if (item) {
+				do {
+					if ([4, 5].indexOf(item.bodylocation) > -1 && [2, 51, 69, 70].indexOf(item.itemType) > -1) {
+						shield = true;
+					}
+				} while (item.getNext());
+			}
+
+			if (!shield) {
+				return 0;
+			}
+
+			if (me.gametype === 0) { // classic
+				return Math.floor(me.getStat(20) + getBaseStat(15, me.classid, 23));
+			}
+
+			return Math.min(75, Math.floor((me.getStat(20) + getBaseStat(15, me.classid, 23)) * (me.getStat(2) - 15) / (me.charlvl * 2)));
+		},
+
 		add: function (name) {
 			switch (name) {
 			case "ping":
@@ -623,28 +1179,84 @@ var Hooks = {
 			case "monsterStatus":
 				this.hooks.push({
 					name: "monsterStatus",
-					hook: new Text("Num 7: Disable Monsters", 445 + Hooks.lowerRightResfixX, 525 + Hooks.resfixY)
+					hook: new Text("Num 7: Disable Monsters", 445 + Hooks.lowerRightResfixX, 535 + Hooks.resfixY)
 				});
 
 				break;
 			case "vectorStatus":
 				this.hooks.push({
 					name: "vectorStatus",
-					hook: new Text("Num 8: Disable Vectors", 445 + Hooks.lowerRightResfixX, 535 + Hooks.resfixY)
+					hook: new Text("Num 8: Disable Vectors", 445 + Hooks.lowerRightResfixX, 545 + Hooks.resfixY)
 				});
 
 				break;
 			case "dashboard":
 				this.hooks.push({
 					name: "dashboard",
-					hook: new Box(Hooks.dashboardX + Hooks.resfixX, Hooks.dashboardY + Hooks.resfixY, 415 + Hooks.dashboardWidthResfixX, 55, 0x0, 1, 2)
+					hook: new Box(Hooks.dashboardX + Hooks.resfixX, Hooks.dashboardY + Hooks.resfixY + this.frameYLocScale, 415 + Hooks.dashboardWidthResfixX, 60 + this.frameYSizeScale, 0x0, 1, 2)
 				});
 
 				break;
 			case "dashboardframe":
 				this.hooks.push({
 					name: "dashboardframe",
-					hook: new Frame(Hooks.dashboardX + Hooks.resfixX, Hooks.dashboardY + Hooks.resfixY, 415 + Hooks.dashboardWidthResfixX, 55, 2)
+					hook: new Frame(Hooks.dashboardX + Hooks.resfixX, Hooks.dashboardY + Hooks.resfixY + this.frameYLocScale, 415 + Hooks.dashboardWidthResfixX, 60 + this.frameYSizeScale, 2)
+				});
+
+				break;
+			case "statBoxA":
+				this.hooks.push({
+					name: "statBoxA",
+					hook: new Box(Hooks.statBoxAX + Hooks.resfixX, Hooks.statBoxAY + Hooks.resfixY, 80, 30, 0x0, 1, 2)
+				});
+
+				break;
+			case "statFrameA":
+				this.hooks.push({
+					name: "statFrameA",
+					hook: new Frame(Hooks.statBoxAX + Hooks.resfixX, Hooks.statBoxAY + Hooks.resfixY, 80, 30, 2)
+				});
+
+				break;
+			case "statBoxB":
+				this.hooks.push({
+					name: "statBoxB",
+					hook: new Box(Hooks.statBoxBX + Hooks.resfixX, Hooks.statBoxBY + Hooks.resfixY, 70, 30, 0x0, 1, 2)
+				});
+
+				break;
+			case "statFrameB":
+				this.hooks.push({
+					name: "statFrameB",
+					hook: new Frame(Hooks.statBoxBX + Hooks.resfixX, Hooks.statBoxBY + Hooks.resfixY, 70, 30, 2)
+				});
+
+				break;
+			case "statlineA":
+				this.hooks.push({
+					name: "statlineA",
+					hook: new Text("ÿc4Block%: ÿc0" + this.getBlock(), 117 + Hooks.lowerRightResfixX, 535 + Hooks.resfixY)
+				});
+
+				break;
+			case "statlineB":
+				this.hooks.push({
+					name: "statlineB",
+					hook: new Text("ÿc4MF: ÿc0" + me.getStat(80), 117 + Hooks.lowerRightResfixX, 545 + Hooks.resfixY)
+				});
+
+				break;
+			case "statlineC":
+				this.hooks.push({
+					name: "statlineC",
+					hook: new Text("ÿc4FCR: ÿc0" + me.getStat(105), 617 + Hooks.lowerRightResfixX, 535 + Hooks.resfixY)
+				});
+
+				break;
+			case "statlineD":
+				this.hooks.push({
+					name: "statlineD",
+					hook: new Text("ÿc4FHR: ÿc0" + me.getStat(99), 617 + Hooks.lowerRightResfixX, 545 + Hooks.resfixY)
 				});
 
 				break;
@@ -718,6 +1330,7 @@ var Hooks = {
 				nextAreas[113] = 115;
 				nextAreas[115] = 117;
 				nextAreas[118] = 120;
+				nextAreas[131] = 132;
 
 				this.currArea = me.area;
 				exits = getArea().exits;
@@ -813,6 +1426,33 @@ var Hooks = {
 			var unit, name;
 
 			switch (me.area) {
+			case 15: // Hole Level 2
+			case 16: // Pit Level 2
+			case 18: // Crypt
+			case 19: // Mausoleum
+			case 59: // Stony Tomb Level 2
+			case 65: // Ancient Tunnels
+			case 84: // Spider Cave
+			case 90: // Swampy Pit Level 3
+			case 94: // Ruined Temple
+			case 95: // Disused Fane
+			case 96: // Forgotten Reliquary
+			case 97: // Forgotten Temple
+			case 99: // Disused Reliquary
+			case 116: // Drifter Cavern
+			case 119: // Icy Cellar
+			case 125: // Abadon
+			case 126: // Pit of Acheron
+			case 127: // Infernal Pit
+				unit = getPresetUnit(me.area, 2, 397);
+				name = "SuperChest";
+
+				break;
+			case 115: // Glacial Trail
+				unit = getPresetUnit(me.area, 2, 455);
+				name = "SuperChest";
+
+				break;
 			case 4: // Stony Field
 				unit = getPresetUnit(me.area, 1, 737);
 				name = "Cairn Stones";
@@ -823,14 +1463,54 @@ var Hooks = {
 				name = "Tree";
 
 				break;
+			case 8: // Den of Evil
+				unit = getPresetUnit(me.area, 1, 774);
+				name = "Corpsefire";
+
+				break;
+			case 25: // Countess
+				unit = getPresetUnit(me.area, 2, 580);
+				name = "Countess";
+
+				break;
+			case 28: // Smith
+				unit = getPresetUnit(me.area, 2, 108);
+				name = "Smith";
+
+				break;
+			case 37: // Andariel
+				unit = {x: 22549, y: 9520};
+				name = "Andariel";
+
+				break;
+			case 38: // Griswold
+				unit = getPresetUnit(me.area, 2, 26);
+				name = "Griswold";
+
+				break;
+			case 40: // Lut Gholein
+				unit = getPresetUnit(me.area, 5, 20);
+				name = "Sewer's Level 1";
+
+				break;	
 			case 49: // Sewers 3
 				unit = getPresetUnit(me.area, 2, 355);
 				name = "Radament";
 
 				break;
+			case 54: // Arcane Sanctuary
+				unit = {x: 10073, y: 8670};
+				name = "Arcane Sanctuary";
+
+				break;
 			case 60: // Halls of the Dead 3
 				unit = getPresetUnit(me.area, 2, 354);
 				name = "Cube";
+
+				break;
+			case 61: // Claw Viper Temple 2
+				unit = getPresetUnit(me.area, 2, 149);
+				name = "Amulet";
 
 				break;
 			case 74: // Arcane Sanctuary
@@ -853,17 +1533,34 @@ var Hooks = {
 				unit = getPresetUnit(me.area, 2, 152);
 				name = "Orifice";
 
+				if (!unit) {
+					unit = getPresetUnit(me.area, 2, 397);
+					name = "SuperChest";
+				}
+
 				break;
 			case 78: // Flayer Jungle
 				unit = getPresetUnit(me.area, 2, 252);
 				name = "Gidbinn";
 
 				break;
+			case 85: // Spider Cavern
+				unit = getPresetUnit(me.area, 2, 755);
+				name = "Eye";
+
+				break;
+			case 91: // Flayer Dungeon Level 3
+				unit = getPresetUnit(me.area, 2, 506);
+				name = "Brain";
+
+				break;
+			case 93: // A3 Sewer's Level 2
+				unit = getPresetUnit(me.area, 2, 405);
+				name = "Heart";
+
+				break;
 			case 102: // Durance of Hate 3
-				unit = {
-					x: 17588,
-					y: 8069
-				};
+				unit = {x: 17588, y: 8069};
 				name = "Mephisto";
 
 				break;
@@ -882,6 +1579,16 @@ var Hooks = {
 				name = "Star";
 
 				break;
+			case 109: // Anya Portal
+				unit = {x: 5112, y: 5120};
+				name = "Anya Portal";
+
+				break;
+			case 110: // Bloody Foothills
+				unit = {x: 3899, y: 5113};
+				name = "Shenk";
+
+				break;
 			case 111: // Frigid Highlands
 			case 112: // Arreat Plateau
 			case 117: // Frozen Tundra
@@ -894,9 +1601,19 @@ var Hooks = {
 				name = "Frozen Anya";
 
 				break;
+			case 121: // Nihlathaks Temple
+				unit = {x: 10058, y: 13234};
+				name = "Pindle";
+
+				break;
 			case 124: // Halls of Vaught
 				unit = getPresetUnit(me.area, 2, 462);
 				name = "Nihlathak";
+
+				break;
+			case 131: // Throne of Destruction
+				unit = {x: 15095, y: 5029};
+				name = "Throne Room";
 
 				break;
 			case 133: // Matron's Den
@@ -967,8 +1684,14 @@ var Hooks = {
 			if (this.action) {
 				switch (this.action) {
 				case 96: // Numpad 0
-					hook = this.getHook("Next Area");
-					obj.type = "area";
+
+					if (me.area === 131) {
+						hook = this.getHook("Worldstone Chamber");
+						obj.type = "portal";
+					} else {
+						hook = this.getHook("Next Area");
+						obj.type = "area";
+					}
 
 					break;
 				case 97: // Numpad 1
@@ -982,6 +1705,7 @@ var Hooks = {
 
 					break;
 				case 99: // Numpad 3
+					if (me.area )
 					hook = this.getHook("POI");
 					obj.type = "unit";
 
@@ -992,18 +1716,39 @@ var Hooks = {
 
 					break;
 				case 54: // 6
-					hook = this.getHook("Matron's Den");
-					obj.type = "portal";
+					if (me.area === 109) {
+						hook = this.getHook("Matron's Den");
+						obj.type = "portal";
+					}
+
+					if (me.area === 108) {
+						hook = this.getHook("Viz Seal");
+						obj.type = "unit";
+					}
 
 					break;
 				case 55: // 7
-					hook = this.getHook("Sands");
-					obj.type = "portal";
+					if (me.area === 109) {
+						hook = this.getHook("Sands");
+						obj.type = "portal";	
+					}
+					
+					if (me.area === 108) {
+						hook = this.getHook("Seis Seal");
+						obj.type = "unit";
+					}
 
 					break;
 				case 56: // 8
-					hook = this.getHook("Furnace");
-					obj.type = "portal";
+					if (me.area === 109) {
+						hook = this.getHook("Furnace");
+						obj.type = "portal";	
+					}
+					
+					if (me.area === 108) {
+						hook = this.getHook("Infector Seal");
+						obj.type = "unit";
+					}
 
 					break;
 				case 57: // 9
@@ -1024,6 +1769,7 @@ var Hooks = {
 
 			if (me.area !== this.currArea) {
 				this.flush();
+				Hooks.text.update();
 				this.add(me.area);
 				addEventListener("keyup", this.event);
 
@@ -1047,12 +1793,44 @@ var Hooks = {
 				nextAreas[46] = getRoom().correcttomb;
 			}
 
+			if (me.area === 108) {
+				let infSeal = this.getDiabloSeals(392);
+
+				if (infSeal) {
+					this.hooks.push({
+						name: "Infector Seal",
+						destination: {x: infSeal.x, y: infSeal.y},
+						hook: new Text("ÿc<NumKey 8: Infector Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+				}
+
+				let seisSeal = this.getDiabloSeals(394);
+
+				if (seisSeal) {
+					this.hooks.push({
+						name: "Seis Seal",
+						destination: {x: seisSeal.x, y: seisSeal.y},
+						hook: new Text("ÿc<NumKey 7: Seis Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+				}
+
+				let vizSeal = this.getDiabloSeals(396);
+
+				if (vizSeal) {
+					this.hooks.push({
+						name: "Viz Seal",
+						destination: {x: vizSeal.x, y: vizSeal.y},
+						hook: new Text("ÿc<NumKey 6: Viz Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+				}
+			}
+
 			switch (me.area) {
 			case 2: // Blood Moor
 				this.hooks.push({
 					name: "Side Area",
 					destination: 8, // Den of Evil
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(8), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(8), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1060,7 +1838,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 17, // Burial Grounds
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(17), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(17), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1068,7 +1846,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 20, // Forgotten Tower
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(20), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(20), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1076,7 +1854,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 12, // Pit Level 1
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(12), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(12), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1084,7 +1862,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 14, // Underground Passage Level 2
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(14), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(14), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1092,7 +1870,15 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 19, // Mausoleum
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(19), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(19), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				break;
+			case 40: // Lut Gholein
+				this.hooks.push({
+					name: "Side Area",
+					destination: 50, // Harem Level 1
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(50), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1100,7 +1886,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 55, // Stony Tomb Level 1
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(55), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(55), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1108,7 +1894,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 56, // Halls of the Dead Level 1
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(56), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(56), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1116,7 +1902,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 62, // Maggot Lair Level 1
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(62), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(62), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1124,7 +1910,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 65, // Ancient Tunnels
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(65), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(65), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1132,7 +1918,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 85, // Spider Cavern
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(85), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(85), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1140,7 +1926,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 88, // Flayer Dungeon Level 1
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(88), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(88), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1148,7 +1934,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 94, // Ruined Temple
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(94), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(94), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1156,7 +1942,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 92, // Sewers Level 1
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(92), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(92), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1164,7 +1950,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 80, // Kurast Bazaar
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(80), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(80), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1172,7 +1958,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 114, // Frozen River
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(114), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(114), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1180,7 +1966,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 116, // Drifter Cavern
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(116), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(116), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1188,7 +1974,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Side Area",
 					destination: 119, // Icy Cellar
-					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(119), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(119), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1200,7 +1986,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "POI",
 					destination: {x: poi.x, y: poi.y},
-					hook: new Text("ÿc<Num 3: " + poi.name, 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc<Num 3: " + poi.name, 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 			}
 
@@ -1210,13 +1996,13 @@ var Hooks = {
 				this.hooks.push({
 					name: "Waypoint",
 					destination: {x: wp.x, y: wp.y},
-					hook: new Text("ÿc9Num 2: WP", 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc9Num 2: WP", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 			}
 
 			let uberPortals = me.area === 109 && me.diff === 2 ? getUnit(2, "portal") : false;
 
-			if (uberPortals) {
+			if (uberPortals && [133, 134, 135, 136].indexOf(uberPortals.objtype) > -1) {
 				this.frame.push({
 					name: "portalbox",
 					hook: new Box (Hooks.portalX - 8, Hooks.portalY + Hooks.resfixY - 17, 190, 70, 0x0, 1, 0)
@@ -1274,7 +2060,7 @@ var Hooks = {
 						this.hooks.push({
 							name: "Previous Area",
 							destination: this.prevAreas[me.area],
-							hook: new Text("ÿc1Num 1: " + Pather.getAreaName(this.prevAreas[me.area]), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+							hook: new Text("ÿc1Num 1: " + Pather.getAreaName(this.prevAreas[me.area]), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 						});
 
 						break;
@@ -1287,7 +2073,7 @@ var Hooks = {
 						this.hooks.push({
 							name: "Next Area",
 							destination: nextAreas[me.area],
-							hook: new Text("ÿc3Num 0: " + Pather.getAreaName(nextAreas[me.area]), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+							hook: new Text("ÿc3Num 0: " + Pather.getAreaName(nextAreas[me.area]), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 						});
 
 						nextCheck = true;
@@ -1303,7 +2089,7 @@ var Hooks = {
 							this.hooks.push({
 								name: "Next Area",
 								destination: this.prevAreas.indexOf(me.area),
-								hook: new Text("Num 0: " + Pather.getAreaName(this.prevAreas.indexOf(me.area)), 200 + Hooks.lowerLeftResfixX, 535 - (this.hooks.length * 10) + Hooks.resfixY)
+								hook: new Text("Num 0: " + Pather.getAreaName(this.prevAreas.indexOf(me.area)), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 							});
 
 							break;
@@ -1312,6 +2098,87 @@ var Hooks = {
 				}
 			}
 
+			if ([38, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+				switch (me.area) {
+				case 38:
+					this.hooks.push({
+						name: "Previous Area",
+						destination: 4,
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(4), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 125:
+					this.hooks.push({
+						name: "Previous Area",
+						destination: 111,
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(111), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 126:
+					this.hooks.push({
+						name: "Previous Area",
+						destination: 112,
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(112), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 127:
+					this.hooks.push({
+						name: "Previous Area",
+						destination: 117,
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(117), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 133:
+				case 134:
+				case 135:
+				case 136:
+					this.hooks.push({
+						name: "Previous Area",
+						destination: 109,
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(109), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				}
+
+			}
+
+			let worldStonePortal = me.area === 131;
+
+			if (worldStonePortal) {
+				this.hooks.push({
+					name: "Worldstone Chamber",
+					destination: 132,
+					hook: new Text("ÿc3Num 0: " + Pather.getAreaName(132), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+			}
+
+		},
+
+		getDiabloSeals: function (seal) {
+			let unit = getPresetUnit(108, 2, seal);
+			if (unit) {print("found seal");}
+			else {print("Didn't find seal");}
+
+			if (unit) {
+				if (unit instanceof PresetUnit) {
+					return {
+						x: unit.roomx * 5 + unit.x,
+						y: unit.roomy * 5 + unit.y,
+					};
+				}
+				
+				return {
+					x: unit.x,
+					y: unit.y,
+				};	
+			}
+
+			return false;
 		},
 
 		getHook: function (name) {
@@ -1338,6 +2205,8 @@ var Hooks = {
 			while (this.frame.length) {
 				this.frame.shift().hook.remove();
 			}
+
+			Hooks.text.flush();
 
 			removeEventListener("keyup", this.event);
 
