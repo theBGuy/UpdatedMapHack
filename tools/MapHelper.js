@@ -68,16 +68,9 @@ function main() {
 							Pather.moveToExit(obj.dest, true);
 						}
 
-						if ([38, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
-							if (!Pather.getPortal()) {
-								me.overhead("Move closer to exit");
-							}
-
-							Pather.usePortal();
-						}
-
 						break;
 					case "unit":
+						if (me.area === 39) { break; }
 						Pather.moveToUnit(obj.dest, true);
 
 						if (me.area === 74) {
@@ -92,7 +85,7 @@ function main() {
 							}
 						}
 
-						if ([4, 54, 109, 111, 112, 117, 125, 126, 127].indexOf(me.area) > -1) {
+						if ([4, 38, 39, 54, 109, 111, 112, 117, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
 							Pather.usePortal();
 						}
 

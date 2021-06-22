@@ -24,6 +24,7 @@ var Hooks = {
 	items: {
 		hooks: [],
 		enabled: true,
+		ignoreItemTypes: [4, 5, 6, 18, 20, 22, 38, 41, 76, 77, 78, 79, 80, 81, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 15, 19, 44, 42, 43],
 
 		check: function () {
 			if (!this.enabled) {
@@ -51,7 +52,7 @@ var Hooks = {
 
 			if (item) {
 				do {
-					if ((item.mode === 3 || item.mode === 5) && (item.quality >= 5 || (item.quality === 4 && [58, 82].indexOf(item.itemType) > -1) || [39, 74].indexOf(item.itemType) > -1)) {
+					if ((item.mode === 3 || item.mode === 5) && (item.quality >= 5 || (item.quality === 4 && [58, 82, 84].indexOf(item.itemType) > -1) || ([2, 3].indexOf(item.quality) > -1 && this.ignoreItemTypes.indexOf(item.itemType) === -1)) ) {
 						if (!this.getHook(item)) {
 							this.add(item);
 						}
@@ -79,22 +80,10 @@ var Hooks = {
 
 			switch (item.quality) {
 			case 2:
+			case 3:
 				switch (item.itemType) {
 				case 39:
 					switch (item.classid) {
-					case 644:
-					case 645:
-					case 646:
-					case 647:
-					case 648:
-					case 649:
-					case 650:
-					case 651:
-					case 652:
-						color = 0x9A;
-						code = "ÿc8" + item.fname;
-
-						break;
 					case 653:
 						color = 0x9A;
 						code = "ÿc8Token";
@@ -115,6 +104,11 @@ var Hooks = {
 						color = 0x9A;
 						code = "ÿc3Ess-Of-Destruction";
 						break;
+					default:
+						color = 0x9A;
+						code = "ÿc8" + item.fname;
+
+						break;
 					}
 
 					name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
@@ -134,7 +128,31 @@ var Hooks = {
 
 					name.push(new Text(code + item.fname, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
 
-					break	
+					break
+				default:
+					color = 0x20;
+					code = "ÿc0" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";
+					let abbr = item.name.split(" ");
+					let abbrName = "";
+
+					if (abbr[1]) {
+						abbrName += abbr[0] + "-"
+
+						for (let i = 1; i < abbr.length; i++) {
+							abbrName += abbr[i].substring(0, 1);
+						}
+
+						code += abbrName;
+					} else {
+						code += item.name;
+					}
+
+					if (item.itemType === 70) {
+						code += "[R: " + item.getStat(39) + "]";
+					}
+
+					name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+					break;	
 				}
 
 				break;
@@ -438,13 +456,13 @@ var Hooks = {
 					code += item.quality === 5 ? "Mavina's Gloves" : "Lava Gout";
 					break;
 				case 329:
-					code += item.quality === 5 ? "Orphan's Shield" : "Umbral Disk";
+					code += item.quality === 5 ? item.name : "Umbral Disk";
 					break;
 				case 356:
 					code += item.quality === 5 ? "G-Face" : "Valk Wing";
 					break;
 				case 347:
-					code += item.quality === 5 ? "Orphan's Belt" : "Snowclash";
+					code += item.quality === 5 ? "Orphan's Belt" : item.name;
 					break;
 				case 335:
 					code += item.quality === 5 ? "Orphan's Gloves" : "Bloodfist";
@@ -474,7 +492,7 @@ var Hooks = {
 					code += item.quality === 5 ? item.name : "Venom Ward";
 					break;
 				case 333:
-					code += item.quality === 5 ? "Heavens's Shield" : "The Ward";
+					code += item.quality === 5 ? item.name : "The Ward";
 					break;
 				case 310:
 					code += item.quality === 5 ? "Heavens's Helm" : "Howltusk";
@@ -543,10 +561,23 @@ var Hooks = {
 				break;
 			case 6: 	// Rare
 				color = 0x6F;
-				code = "ÿc9" + item.name + "(" + item.ilvl + ")";
+				code = "ÿc9" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";
+				let abbr = item.name.split(" ");
+				let abbrName = "";
 
-				name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+				if (abbr[1]) {
+					abbrName += abbr[0] + "-"
 
+					for (let i = 1; i < abbr.length; i++) {
+						abbrName += abbr[i].substring(0, 1);
+					}
+
+					code += abbrName;
+				} else {
+					code += item.name;
+				}
+
+				name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
 				break;
 			}
 
@@ -918,6 +949,7 @@ var Hooks = {
 			case 36:
 			case 37:
 			case 38:
+			case 39:
 			case 45:
 			case 46:
 			case 48:
@@ -944,7 +976,6 @@ var Hooks = {
 			case 72:
 			case 73:
 			case 74:
-			case 82:
 			case 84:
 			case 85:
 			case 86:
@@ -953,6 +984,7 @@ var Hooks = {
 			case 89:
 			case 90:
 			case 91:
+			case 93:
 			case 94:
 			case 95:
 			case 96:
@@ -992,7 +1024,6 @@ var Hooks = {
 			case 43:
 			case 44:
 			case 76:
-			case 78:
 			case 80:
 			case 81:
 			case 83:
@@ -1021,8 +1052,8 @@ var Hooks = {
 			case 59:
 			case 77:
 			case 79:
+			case 82:
 			case 92:
-			case 93:
 			case 101:
 			case 105:
 			case 106:
@@ -1468,6 +1499,11 @@ var Hooks = {
 				name = "Corpsefire";
 
 				break;
+			case 17: // Bloodraven
+				unit = getPresetUnit(me.area, 1, 805);
+				name = "Bloodraven";
+
+				break;
 			case 25: // Countess
 				unit = getPresetUnit(me.area, 2, 580);
 				name = "Countess";
@@ -1486,6 +1522,16 @@ var Hooks = {
 			case 38: // Griswold
 				unit = getPresetUnit(me.area, 2, 26);
 				name = "Griswold";
+
+				break;
+			case 39: // Cow King
+				if (getUnit(1, "The Cow King")) {
+					unit = getUnit(1, "The Cow King");
+				} else {
+					unit = getPresetUnit(me.area, 1, 773);
+				}
+				
+				name = "Cow King";
 
 				break;
 			case 40: // Lut Gholein
@@ -1545,18 +1591,28 @@ var Hooks = {
 
 				break;
 			case 85: // Spider Cavern
-				unit = getPresetUnit(me.area, 2, 755);
+				unit = getPresetUnit(me.area, 2, 407);
 				name = "Eye";
 
 				break;
 			case 91: // Flayer Dungeon Level 3
-				unit = getPresetUnit(me.area, 2, 506);
+				unit = getPresetUnit(me.area, 2, 406);
 				name = "Brain";
 
 				break;
 			case 93: // A3 Sewer's Level 2
 				unit = getPresetUnit(me.area, 2, 405);
 				name = "Heart";
+
+				break;
+			case 97: // Ruined Temple
+				unit = getPresetUnit(me.area, 2, 193);
+				name = "Lam Esen";
+
+				break;
+			case 83: // Travincal
+				unit = getPresetUnit(me.area, 2, 404);
+				name = "Orb";
 
 				break;
 			case 102: // Durance of Hate 3
@@ -1614,6 +1670,16 @@ var Hooks = {
 			case 131: // Throne of Destruction
 				unit = {x: 15095, y: 5029};
 				name = "Throne Room";
+
+				break;
+			case 132: // Worldstone Chamber
+				if (getUnit(1, 544)) {
+					unit = getUnit(1, 544);
+				} else {
+					unit = {x: 15134, y: 5923}
+				}
+				
+				name = "Baal";
 
 				break;
 			case 133: // Matron's Den
@@ -1696,7 +1762,12 @@ var Hooks = {
 					break;
 				case 97: // Numpad 1
 					hook = this.getHook("Previous Area");
-					obj.type = "area";
+
+					if ([38, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+						obj.type = "unit";
+					} else {
+						obj.type = "area";
+					}
 
 					break;
 				case 98: // Numpad 2
@@ -1705,7 +1776,6 @@ var Hooks = {
 
 					break;
 				case 99: // Numpad 3
-					if (me.area )
 					hook = this.getHook("POI");
 					obj.type = "unit";
 
@@ -1946,6 +2016,14 @@ var Hooks = {
 				});
 
 				break;
+			case 82: // Kurast Causeway
+				this.hooks.push({
+					name: "Side Area",
+					destination: 99, // Disused Reliquary
+					hook: new Text("ÿc3Num 4: " + Pather.getAreaName(92), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				break;
 			case 92: // Sewers Level 1
 				this.hooks.push({
 					name: "Side Area",
@@ -2098,36 +2176,97 @@ var Hooks = {
 				}
 			}
 
-			if ([38, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+			if ([38, 39, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+				let chest, entrance = {x: 0, y: 0};
+
 				switch (me.area) {
 				case 38:
 					this.hooks.push({
 						name: "Previous Area",
-						destination: 4,
+						destination: {x: 25173, y: 5086},
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(4), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
 					break;
-				case 125:
+				case 39:
 					this.hooks.push({
 						name: "Previous Area",
-						destination: 111,
+						destination: {x: 25173, y: 5086},
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(1), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 125: 	// Abadon
+					chest = getPresetUnit(me.area, 2, 397);
+
+					switch (chest.x) {
+					case 14:
+						entrance = {x: 12638, y: 6373};
+
+						break;
+					case 15:
+						entrance = {x: 12638, y: 6063};
+
+						break;
+					case 20:
+						entrance = {x: 12708, y: 6063};
+
+						break;
+					}
+
+					this.hooks.push({
+						name: "Previous Area",
+						destination: entrance,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(111), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
 					break;
 				case 126:
+					chest = getPresetUnit(me.area, 2, 397);
+
+					switch (chest.x) {
+					case 14:
+						entrance = {x: 12638, y: 7873};
+
+						break;
+					case 15:
+						entrance = {x: 12638, y: 7563};
+
+						break;
+					case 25:
+						entrance = {x: 12948, y: 7628};
+
+						break;
+					}
+
 					this.hooks.push({
 						name: "Previous Area",
-						destination: 112,
+						destination: entrance,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(112), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
 					break;
 				case 127:
+					chest = getPresetUnit(me.area, 2, 397);
+
+					switch (chest.x) {
+					case 14:
+						entrance = {x: 12638, y: 9373};
+
+						break;
+					case 20:
+						entrance = {x: 12708, y: 9063};
+
+						break;
+					case 25:
+						entrance = {x: 12948, y: 9128};
+
+						break;
+					}
+
 					this.hooks.push({
 						name: "Previous Area",
-						destination: 117,
+						destination: entrance,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(117), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
