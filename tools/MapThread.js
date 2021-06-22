@@ -111,7 +111,7 @@ var Hooks = {
 						break;
 					}
 
-					name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+					name.push(new Text(code, 665 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
 
 					break;
 				case 74:
@@ -126,7 +126,7 @@ var Hooks = {
 						code = "";
 					}
 
-					name.push(new Text(code + item.fname, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+					name.push(new Text(code + item.fname, 665 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
 
 					break
 				default:
@@ -152,7 +152,7 @@ var Hooks = {
 							code += "[R: " + item.getStat(39) + "]";
 						}
 
-						name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));	
+						name.push(new Text(code + "(" + item.ilvl + ")", 665 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));	
 					}
 
 					break;	
@@ -556,7 +556,7 @@ var Hooks = {
 					break;
 				}
 
-				name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+				name.push(new Text(code, 665 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
 	
 				break;
 			case 4: 	// Magic
@@ -585,7 +585,7 @@ var Hooks = {
 						code += item.name;
 					}
 
-					name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));	
+					name.push(new Text(code + "(" + item.ilvl + ")", 665 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));	
 				}
 				
 				break;
