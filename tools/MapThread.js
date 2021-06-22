@@ -1499,6 +1499,11 @@ var Hooks = {
 				break;
 			case 3: // Cold Plains
 				unit = getPresetUnit(me.area, 5, 2);
+
+				if (!unit) {
+					unit = getPresetUnit(me.area, 5, 3);
+				}
+
 				name = "Cave Level 1";
 
 				break;
@@ -1513,7 +1518,16 @@ var Hooks = {
 
 				break;
 			case 6: // Black Marsh
-				unit = getPresetUnit(me.area, 5, 3);
+				unit = getPresetUnit(me.area, 5, 2);
+
+				if (!unit) {
+					unit = getPresetUnit(me.area, 5, 3);
+
+					if (!unit) {
+						unit = getPresetUnit(me.area, 5, 1);
+					}
+				}
+
 				name = "Hole Level 1";
 
 				break;
@@ -2475,6 +2489,12 @@ function main() {
 			Hooks.update();
 		} else {
 			Hooks.flush();
+		}
+
+		if (!getUIFlag(0x01) || !getUIFlag(0x19) || !getUIFlag(0x1A)) {
+			if (!info.cleared) {
+				info.remove();
+			}
 		}
 
 		delay(20);

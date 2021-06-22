@@ -91,11 +91,11 @@ function main() {
 
 						switch (me.area) {
 						case 3: 	// Cold Plains -> Cave Level 1
-							Pather.useUnit(5, 2, 9);
+							Pather.moveToExit(9, true);
 
 							break;
 						case 6: 	// Black Marsh -> Hole Level 1
-							Pather.useUnit(5, 3, 11);
+							Pather.moveToExit(11, true);
 
 							break;
 						case 40: 	// Lut Gholein -> Sewers Level  1
