@@ -114,7 +114,70 @@ function main() {
 							break;
 						}
 
-						Misc.openChests(5);
+						let chest;
+
+						switch (me.area) {
+						case 13: // Cave Level 2
+						case 15: // Hole Level 2
+						case 16: // Pit Level 2
+						case 18: // Crypt
+						case 19: // Mausoleum
+						case 59: // Stony Tomb Level 2
+						case 65: // Ancient Tunnels
+						case 84: // Spider Cave
+						case 90: // Swampy Pit Level 3
+						case 94: // Ruined Temple
+						case 95: // Disused Fane
+						case 96: // Forgotten Reliquary
+						case 97: // Forgotten Temple
+						case 99: // Disused Reliquary
+						case 116: // Drifter Cavern
+						case 119: // Icy Cellar
+						case 125: // Abadon
+						case 126: // Pit of Acheron
+						case 127: // Infernal Pit
+							chest = getUnit(2, 397);
+
+							break;
+						case 115: // Glacial Trail
+						case 122: // Halls of Anguish
+						case 123: // Halls of Pain
+							chest = getUnit(2, 455);
+
+							break;
+						case 60: // Halls of the Dead 3
+							chest = getUnit(2, 354);
+
+							break;
+						case 61: // Claw Viper Temple 2
+							chest = getUnit(2, 149);
+
+							break;
+						case 64: // Maggot Lair 3
+							chest = getUnit(2, 356);
+
+							break;
+						case 85: // Spider Cavern
+							chest = getUnit(2, 407);
+
+							break;
+						case 91: // Flayer Dungeon Level 3
+							chest = getUnit(2, 406);
+
+							break;
+						case 93: // A3 Sewer's Level 2
+							chest = getUnit(2, 405);
+
+							break;
+						case 97: // Ruined Temple
+							chest = getUnit(2, 193);
+
+							break;
+						}
+
+						if (chest) {
+							Misc.openChest(chest);
+						}
 
 						break;
 					case "wp":

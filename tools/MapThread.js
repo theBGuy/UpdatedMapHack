@@ -1602,8 +1602,8 @@ var Hooks = {
 
 				break;
 			case 64: // Maggot Lair 3
-				unit = getPresetUnit(me.area, 1, 749);
-				name = "Fat Worm";
+				unit = getPresetUnit(me.area, 2, 356);
+				name = "Staff";
 
 				break;
 			case 66: // Tal Rasha's Tombs
