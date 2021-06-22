@@ -1027,27 +1027,6 @@ var Hooks = {
 				this.frameYLocScale = 30;
 				break;
 			case 2:
-			case 4:
-			case 5:
-			case 17:
-			case 40:
-			case 42:
-			case 43:
-			case 44:
-			case 76:
-			case 81:
-			case 83:
-			case 107:
-			case 111:
-			case 112:
-			case 113:
-			case 117:
-			case 118:
-			case 123:
-				this.frameYSizeScale = -10;
-				this.frameYLocScale = 10;
-				break;
-			case 2:
 			case 7:
 			case 10:
 			case 18:
@@ -1062,7 +1041,6 @@ var Hooks = {
 			case 57:
 			case 77:
 			case 79:
-			case 82:
 			case 92:
 			case 101:
 			case 105:
@@ -1074,6 +1052,31 @@ var Hooks = {
 			case 131:
 				this.frameYSizeScale = -20;
 				this.frameYLocScale = 20;
+				break;
+			case 2:
+			case 4:
+			case 5:
+			case 17:
+			case 40:
+			case 42:
+			case 43:
+			case 44:
+			case 83:
+			case 107:
+			case 111:
+			case 112:
+			case 113:
+			case 117:
+			case 118:
+			case 123:
+				this.frameYSizeScale = -10;
+				this.frameYLocScale = 10;
+				break;
+			case 78:
+			case 80:
+			case 81:
+				this.frameYSizeScale = 10;
+				this.frameYLocScale = -10;
 				break;
 			default:
 				this.frameYSizeScale = 0;
@@ -1476,7 +1479,6 @@ var Hooks = {
 			case 65: // Ancient Tunnels
 			case 84: // Spider Cave
 			case 90: // Swampy Pit Level 3
-			case 94: // Ruined Temple
 			case 95: // Disused Fane
 			case 96: // Forgotten Reliquary
 			case 97: // Forgotten Temple
@@ -1647,7 +1649,7 @@ var Hooks = {
 				name = "Heart";
 
 				break;
-			case 97: // Ruined Temple
+			case 94: // Ruined Temple
 				unit = getPresetUnit(me.area, 2, 193);
 				name = "Lam Esen";
 
@@ -1828,26 +1830,56 @@ var Hooks = {
 
 					break;
 				case 54: // 6
-					if (me.area === 109) {
-						hook = this.getHook("Matron's Den");
-						obj.type = "portal";
-					}
-
-					if (me.area === 108) {
+					switch (me.area) {
+					case 76:
+						hook = this.getHook("Spider Cave");
+						obj.type = "area";
+						break;
+					case 78:
+						hook = this.getHook("Swampy Pit Level 1");
+						obj.type = "area";
+						break;
+					case 80:
+						hook = this.getHook("Disused Fane");
+						obj.type = "area";
+						break;
+					case 81:
+						hook = this.getHook("Forgotten Reliquary");
+						obj.type = "area";
+						break;
+					case 82:
+						hook = this.getHook("Disused Reliquary");
+						obj.type = "area";
+						break;
+					case 108:
 						hook = this.getHook("Viz Seal");
 						obj.type = "unit";
+						break;
+					case 109:
+						hook = this.getHook("Matron's Den");
+						obj.type = "portal";
+						break;
 					}
 
 					break;
 				case 55: // 7
-					if (me.area === 109) {
-						hook = this.getHook("Sands");
-						obj.type = "portal";	
-					}
-					
-					if (me.area === 108) {
+					switch (me.area) {
+					case 81:
+						hook = this.getHook("Forgotten Temple");
+						obj.type = "area";
+						break;
+					case 82:
+						hook = this.getHook("Ruined Fane");
+						obj.type = "area";
+						break;
+					case 108:
 						hook = this.getHook("Seis Seal");
 						obj.type = "unit";
+						break;
+					case 109:
+						hook = this.getHook("Sands");
+						obj.type = "portal";
+						break;
 					}
 
 					break;
@@ -1905,7 +1937,60 @@ var Hooks = {
 				nextAreas[46] = getRoom().correcttomb;
 			}
 
-			if (me.area === 108) {
+			switch (me.area) {
+			case 76:
+				this.hooks.push({
+					name: "Spider Cave",
+					destination: 84,
+					hook: new Text("ÿc<NumKey 6: " + Pather.getAreaName(84), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				break;
+			case 78:
+				this.hooks.push({
+					name: "Swampy Pit Level 1",
+					destination: 86,
+					hook: new Text("ÿc<NumKey 6: Swampy Pit Level 1", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				break;
+			case 80:
+				this.hooks.push({
+					name: "Disused Fane",
+					destination: 95,
+					hook: new Text("ÿc<NumKey 6: " + Pather.getAreaName(95), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				break;
+			case 81:
+				this.hooks.push({
+					name: "Forgotten Temple",
+					destination: 97,
+					hook: new Text("ÿc<NumKey 7: " + Pather.getAreaName(97), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				this.hooks.push({
+					name: "Forgotten Reliquary",
+					destination: 96,
+					hook: new Text("ÿc<NumKey 6: " + Pather.getAreaName(96), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				break;
+			case 82:
+				this.hooks.push({
+					name: "Ruined Fane",
+					destination: 98,
+					hook: new Text("ÿc<NumKey 7: " + Pather.getAreaName(98), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				this.hooks.push({
+					name: "Disused Reliquary",
+					destination: 99,
+					hook: new Text("ÿc<NumKey 6: " + Pather.getAreaName(99), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				break;
+			case 108:
 				let infSeal = this.getDiabloSeals(392);
 
 				if (infSeal) {
@@ -1935,6 +2020,8 @@ var Hooks = {
 						hook: new Text("ÿc<NumKey 6: Viz Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 				}
+
+				break;
 			}
 
 			switch (me.area) {

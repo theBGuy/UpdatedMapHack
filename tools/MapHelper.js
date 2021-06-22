@@ -126,7 +126,6 @@ function main() {
 						case 65: // Ancient Tunnels
 						case 84: // Spider Cave
 						case 90: // Swampy Pit Level 3
-						case 94: // Ruined Temple
 						case 95: // Disused Fane
 						case 96: // Forgotten Reliquary
 						case 97: // Forgotten Temple
@@ -169,7 +168,7 @@ function main() {
 							chest = getUnit(2, 405);
 
 							break;
-						case 97: // Ruined Temple
+						case 94: // Ruined Temple
 							chest = getUnit(2, 193);
 
 							break;
