@@ -17,6 +17,10 @@ Make sure you have this version of kolbot https://github.com/blizzhackers/kolbot
 ## Collaborting
 If I have missed anything or you have an idea feel free to let me know. This is a work in progress.
 
+## Support
+If you enjoy using this and wish to show support. I do enjoy coffees
+https://www.buymeacoffee.com/theBGuy
+
 ## Enjoy
 
 ![image](https://user-images.githubusercontent.com/60308670/122955495-29f89980-d34e-11eb-92e2-a7c791644108.png)
