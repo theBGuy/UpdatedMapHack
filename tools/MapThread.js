@@ -52,7 +52,7 @@ var Hooks = {
 
 			if (item) {
 				do {
-					if ((item.mode === 3 || item.mode === 5) && (item.quality >= 5 || (item.quality === 4 && [58, 82, 84].indexOf(item.itemType) > -1) || ([2, 3].indexOf(item.quality) > -1 && this.ignoreItemTypes.indexOf(item.itemType) === -1)) ) {
+					if ((item.mode === 3 || item.mode === 5) && (item.quality >= 5 || item.quality === 4 || ([2, 3].indexOf(item.quality) > -1 && this.ignoreItemTypes.indexOf(item.itemType) === -1)) ) {
 						if (!this.getHook(item)) {
 							this.add(item);
 						}
@@ -130,7 +130,7 @@ var Hooks = {
 
 					break
 				default:
-					if (item.itemType) {
+					if (item.name) {
 						color = 0x20;
 						code = "ÿc0" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";
 						let abbr = item.name.split(" ");
@@ -154,16 +154,10 @@ var Hooks = {
 
 						name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));	
 					}
-					
+
 					break;	
 				}
 
-				break;
-			case 4: 	// Magic
-				color = 0x97;
-				code = "ÿc3" + item.name + "(" + item.ilvl + ")";
-
-				name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
 				break;
 			case 5: 	// Set
 			case 7: 	// Unique
@@ -565,25 +559,35 @@ var Hooks = {
 				name.push(new Text(code, 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
 	
 				break;
+			case 4: 	// Magic
 			case 6: 	// Rare
-				color = 0x6F;
-				code = "ÿc9" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";
-				let abbr = item.name.split(" ");
-				let abbrName = "";
+				if (item.name) {
+					if (item.quality === 4) {
+						color = 0x97;
+						code = "ÿc3" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";
+					} else {
+						color = 0x6F;
+						code = "ÿc9" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";	
+					}
+					
+					let abbr = item.name.split(" ");
+					let abbrName = "";
 
-				if (abbr[1]) {
-					abbrName += abbr[0] + "-"
+					if (abbr[1]) {
+						abbrName += abbr[0] + "-"
 
-					for (let i = 1; i < abbr.length; i++) {
-						abbrName += abbr[i].substring(0, 1);
+						for (let i = 1; i < abbr.length; i++) {
+							abbrName += abbr[i].substring(0, 1);
+						}
+
+						code += abbrName;
+					} else {
+						code += item.name;
 					}
 
-					code += abbrName;
-				} else {
-					code += item.name;
+					name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));	
 				}
-
-				name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+				
 				break;
 			}
 
@@ -2456,6 +2460,8 @@ function main() {
 	var i,
 		hideFlags = [0x09, 0x0C, 0x0D, 0x01, 0x02, 0x0F, 0x18, 0x19, 0x1A, 0x21, 0x05, 0x14, 0x24];
 
+	let itemInfo, info = new UnitInfo();
+
 	addEventListener("keyup", this.keyEvent);
 
 	while (true) {
@@ -2476,8 +2482,93 @@ function main() {
 		for (i = 0; i < hideFlags.length; i += 1) {
 			while (getUIFlag(hideFlags[i])) {
 				Hooks.flush();
+
+				if (getUIFlag(0x01) || getUIFlag(0x19) || getUIFlag(0x1A)) {
+					itemInfo = getUnit(101);
+					info.createInfo(itemInfo);
+					delay(20);
+				}
+
 				delay(100);
 			}
 		}
 	}
+}
+
+function UnitInfo() {
+	this.x = 60;
+	this.y = 20;
+	this.hooks = [];
+	this.cleared = true;
+
+	this.createInfo = function (unit) {
+		if (typeof unit === "undefined") {
+			this.remove();
+
+			return;
+		}
+
+		switch (unit.type) {
+		case 4:
+			this.itemInfo(unit);
+
+			break;
+		}
+	};
+
+	this.itemInfo = function (unit) {
+		var i = 0,
+			frameYsize = 50;
+
+		if (!this.currentGid) {
+			this.currentGid = unit.gid;
+		}
+
+		if (this.currentGid === unit.gid && !this.cleared) {
+			return;
+		}
+
+		if (this.currentGid !== unit.gid) {
+			this.remove();
+			this.currentGid = unit.gid;
+		}
+
+		this.hooks.push(new Text("Classid: ÿc0" + unit.classid, this.x, this.y, 4, 13, 2));
+		this.hooks.push(new Text("Code: ÿc0" + unit.code, this.x, this.y + 15, 4, 13, 2));
+		this.hooks.push(new Text("Item level: ÿc0" + unit.ilvl, this.x, this.y + 30, 4, 13, 2));
+
+		this.cleared = false;
+		this.socketedItems = unit.getItems();
+
+		if (this.socketedItems) {
+			this.hooks.push(new Text("Socketed with:", this.x, this.y + 45, 4, 13, 2));
+			frameYsize += 15;
+
+			for (i = 0; i < this.socketedItems.length; i += 1) {
+				this.hooks.push(new Text(this.socketedItems[i].fname.split("\n").reverse().join(" "), this.x, this.y + (i + 4) * 15, 0, 13, 2));
+
+				frameYsize += 15;
+			}
+		}
+
+		if (unit.quality === 4 && unit.getFlag(0x10)) {
+			this.hooks.push(new Text("Prefix: ÿc0" + unit.prefixnum, this.x, this.y + frameYsize - 5, 4, 13, 2));
+			this.hooks.push(new Text("Suffix: ÿc0" + unit.suffixnum, this.x, this.y + frameYsize + 10, 4, 13, 2));
+
+			frameYsize += 30;
+		}
+
+		this.hooks.push(new Box(this.x + 2, this.y - 15, 116, frameYsize, 0x0, 1, 2));
+		this.hooks.push(new Frame(this.x, this.y - 15, 120, frameYsize, 2));
+
+		this.hooks[this.hooks.length - 2].zorder = 0;
+	};
+
+	this.remove = function () {
+		while (this.hooks.length > 0) {
+			this.hooks.shift().remove();
+		}
+
+		this.cleared = true;
+	};
 }
