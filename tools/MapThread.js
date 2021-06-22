@@ -75,7 +75,7 @@ var Hooks = {
 		},
 
 		newHook: function (item) {
-			var color, code, arr = [], name = [], vector = [];
+			var color = 0, code = "", arr = [], name = [], vector = [];
 			// White: ÿc0, Red: ÿc1, Light Green: ÿc2, Blue: ÿc3, Gold: ÿc4, Gray: ÿc5, Black: ÿc6, Lighter Gold?: ÿc7, Orange: ÿc8, Tan?: ÿc9, Dark Green: ÿc:, Purple: ÿc;, Green: ÿc<"
 
 			switch (item.quality) {
@@ -130,28 +130,31 @@ var Hooks = {
 
 					break
 				default:
-					color = 0x20;
-					code = "ÿc0" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";
-					let abbr = item.name.split(" ");
-					let abbrName = "";
+					if (item.itemType) {
+						color = 0x20;
+						code = "ÿc0" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";
+						let abbr = item.name.split(" ");
+						let abbrName = "";
 
-					if (abbr[1]) {
-						abbrName += abbr[0] + "-"
+						if (abbr[1]) {
+							abbrName += abbr[0] + "-"
 
-						for (let i = 1; i < abbr.length; i++) {
-							abbrName += abbr[i].substring(0, 1);
+							for (let i = 1; i < abbr.length; i++) {
+								abbrName += abbr[i].substring(0, 1);
+							}
+
+							code += abbrName;
+						} else {
+							code += item.name;
 						}
 
-						code += abbrName;
-					} else {
-						code += item.name;
-					}
+						if (item.itemType === 70) {
+							code += "[R: " + item.getStat(39) + "]";
+						}
 
-					if (item.itemType === 70) {
-						code += "[R: " + item.getStat(39) + "]";
+						name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));	
 					}
-
-					name.push(new Text(code + "(" + item.ilvl + ")", 675 + Hooks.upperRightResfixX, 104 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)) + (this.hooks.length * 14), color, 0, 0));
+					
 					break;	
 				}
 
@@ -932,9 +935,11 @@ var Hooks = {
 			case 103:
 			case 8:
 			case 9:
+			case 11:
 			case 12:
 			case 13:
 			case 14:
+			case 15:
 			case 16:
 			case 18:
 			case 19:
@@ -955,7 +960,7 @@ var Hooks = {
 			case 39:
 			case 45:
 			case 46:
-			case 48:
+			case 47:
 			case 49:
 			case 50:
 			case 51:
@@ -964,6 +969,7 @@ var Hooks = {
 			case 55:
 			case 56:
 			case 58:
+			case 59:
 			case 60:
 			case 61:
 			case 62:
@@ -1017,16 +1023,14 @@ var Hooks = {
 				this.frameYLocScale = 30;
 				break;
 			case 2:
-			case 3:
 			case 4:
 			case 5:
-			case 6:
+			case 17:
 			case 40:
 			case 42:
 			case 43:
 			case 44:
 			case 76:
-			case 80:
 			case 81:
 			case 83:
 			case 107:
@@ -1049,10 +1053,9 @@ var Hooks = {
 			case 32:
 			case 35:
 			case 41:
-			case 47:
+			case 48:
 			case 52:
 			case 57:
-			case 59:
 			case 77:
 			case 79:
 			case 82:
@@ -1460,6 +1463,7 @@ var Hooks = {
 			var unit, name;
 
 			switch (me.area) {
+			case 13: // Cave Level 2
 			case 15: // Hole Level 2
 			case 16: // Pit Level 2
 			case 18: // Crypt
@@ -1489,6 +1493,11 @@ var Hooks = {
 				name = "SuperChest";
 
 				break;
+			case 3: // Cold Plains
+				unit = getPresetUnit(me.area, 5, 2);
+				name = "Cave Level 1";
+
+				break;
 			case 4: // Stony Field
 				unit = getPresetUnit(me.area, 1, 737);
 				name = "Cairn Stones";
@@ -1497,6 +1506,11 @@ var Hooks = {
 			case 5: // Dark Wood
 				unit = getPresetUnit(me.area, 2, 30);
 				name = "Tree";
+
+				break;
+			case 6: // Black Marsh
+				unit = getPresetUnit(me.area, 5, 3);
+				name = "Hole Level 1";
 
 				break;
 			case 8: // Den of Evil
@@ -1593,6 +1607,11 @@ var Hooks = {
 			case 78: // Flayer Jungle
 				unit = getPresetUnit(me.area, 2, 252);
 				name = "Gidbinn";
+
+				break;
+			case 80: // Sewer's Level 1
+				unit = getPresetUnit(me.area, 5, 57);
+				name = "Sewer's Level 1";
 
 				break;
 			case 85: // Spider Cavern

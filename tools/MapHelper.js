@@ -89,9 +89,32 @@ function main() {
 							Pather.usePortal();
 						}
 
-						if (me.area === 40) {
+						switch (me.area) {
+						case 3: 	// Cold Plains -> Cave Level 1
+							Pather.useUnit(5, 2, 9);
+
+							break;
+						case 6: 	// Black Marsh -> Hole Level 1
+							Pather.useUnit(5, 3, 11);
+
+							break;
+						case 40: 	// Lut Gholein -> Sewers Level  1
 							Pather.useUnit(5, 20, 47);
+
+							break;
+						case getRoom().correcttomb:
+							if (getUnit(2, 100)) {
+								Pather.useUnit(2, 100, 73);
+							}
+							
+							break;
+						case 80: 	// Kurast Bazaar -> A3 Sewers Level 1
+							Pather.useUnit(5, 57, 92);
+
+							break;
 						}
+
+						Misc.openChests(5);
 
 						break;
 					case "wp":
