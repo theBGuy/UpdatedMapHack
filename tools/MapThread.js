@@ -349,6 +349,9 @@ var Hooks = {
 				case 359:
 					code += item.quality === 5 ? "" : "Spirit Shroud";
 					break;
+				case 157:
+					code += item.quality === 5 ? "" : "Ribcracker";
+					break;
 				//Set Items/Uniques
 				case 290:
 					code += item.quality === 5 ? "Tal Orb" : "Occulus";
@@ -999,7 +1002,6 @@ var Hooks = {
 			case 119:
 			case 120:
 			case 121:
-			case 122:
 			case 124:
 			case 125:
 			case 126:
@@ -1033,6 +1035,7 @@ var Hooks = {
 			case 113:
 			case 117:
 			case 118:
+			case 123:
 				this.frameYSizeScale = -10;
 				this.frameYLocScale = 10;
 				break;
@@ -1059,7 +1062,7 @@ var Hooks = {
 			case 106:
 			case 109:
 			case 110:
-			case 123:
+			case 122:
 			case 129:
 			case 131:
 				this.frameYSizeScale = -20;
@@ -1480,6 +1483,8 @@ var Hooks = {
 
 				break;
 			case 115: // Glacial Trail
+			case 122: // Halls of Anguish
+			case 123: // Halls of Pain
 				unit = getPresetUnit(me.area, 2, 455);
 				name = "SuperChest";
 
@@ -2189,9 +2194,18 @@ var Hooks = {
 
 					break;
 				case 39:
+					let king = getPresetUnit(me.area, 1, 773);
+
+					switch (king.x) {
+					case 1:
+						entrance = {x: 25188, y: 5923};
+
+						break;
+					}
+
 					this.hooks.push({
 						name: "Previous Area",
-						destination: {x: 25173, y: 5086},
+						destination: entrance,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(1), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
@@ -2300,8 +2314,6 @@ var Hooks = {
 
 		getDiabloSeals: function (seal) {
 			let unit = getPresetUnit(108, 2, seal);
-			if (unit) {print("found seal");}
-			else {print("Didn't find seal");}
 
 			if (unit) {
 				if (unit instanceof PresetUnit) {
