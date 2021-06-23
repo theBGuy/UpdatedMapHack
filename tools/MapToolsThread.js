@@ -675,6 +675,7 @@ function main() {
 			}
 		} catch (e) {
 			Misc.errorReport(e, "ToolsThread");
+			takeScreenshot();
 
 			quitFlag = true;
 		}

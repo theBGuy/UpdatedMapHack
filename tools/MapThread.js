@@ -14,6 +14,11 @@ var Hooks = {
 	statBoxAY: 520,
 	statBoxBX: 645,
 	statBoxBY: 520,
+	statBoxAResFixX: me.screensize ? 0 : -106,
+	statBoxAResFixY: me.screensize ? 0 : -445,
+	statBoxBResFixX: me.screensize ? 0 : -600,
+	statBoxBResFixY: me.screensize ? 0 : -413,
+	statBoxBTextResFixX: me.screensize ? 0 : -5,
 	resfixX: me.screensize ? 0 : -85,
 	resfixY: me.screensize ? 0 : -120,
 	upperRightResfixX: me.screensize ? 0 : -160,
@@ -1251,56 +1256,56 @@ var Hooks = {
 			case "statBoxA":
 				this.hooks.push({
 					name: "statBoxA",
-					hook: new Box(Hooks.statBoxAX + Hooks.resfixX, Hooks.statBoxAY + Hooks.resfixY, 80, 30, 0x0, 1, 2)
+					hook: new Box(Hooks.statBoxAX + Hooks.statBoxAResFixX, Hooks.statBoxAY + Hooks.statBoxAResFixY, 80, 30, 0x0, 1, 2)
 				});
 
 				break;
 			case "statFrameA":
 				this.hooks.push({
 					name: "statFrameA",
-					hook: new Frame(Hooks.statBoxAX + Hooks.resfixX, Hooks.statBoxAY + Hooks.resfixY, 80, 30, 2)
+					hook: new Frame(Hooks.statBoxAX + Hooks.statBoxAResFixX, Hooks.statBoxAY + Hooks.statBoxAResFixY, 80, 30, 2)
 				});
 
 				break;
 			case "statBoxB":
 				this.hooks.push({
 					name: "statBoxB",
-					hook: new Box(Hooks.statBoxBX + Hooks.resfixX, Hooks.statBoxBY + Hooks.resfixY, 70, 30, 0x0, 1, 2)
+					hook: new Box(Hooks.statBoxBX + Hooks.statBoxBResFixX, Hooks.statBoxBY + Hooks.statBoxBResFixY, 80, 30, 0x0, 1, 2)
 				});
 
 				break;
 			case "statFrameB":
 				this.hooks.push({
 					name: "statFrameB",
-					hook: new Frame(Hooks.statBoxBX + Hooks.resfixX, Hooks.statBoxBY + Hooks.resfixY, 70, 30, 2)
+					hook: new Frame(Hooks.statBoxBX + Hooks.statBoxBResFixX, Hooks.statBoxBY + Hooks.statBoxBResFixY, 80, 30, 2)
 				});
 
 				break;
 			case "statlineA":
 				this.hooks.push({
 					name: "statlineA",
-					hook: new Text("ÿc4Block%: ÿc0" + this.getBlock(), 117 + Hooks.lowerRightResfixX, 535 + Hooks.resfixY)
+					hook: new Text("ÿc4Block%: ÿc0" + this.getBlock(), 117 + Hooks.statBoxAResFixX, 535 + Hooks.statBoxAResFixY)
 				});
 
 				break;
 			case "statlineB":
 				this.hooks.push({
 					name: "statlineB",
-					hook: new Text("ÿc4MF: ÿc0" + me.getStat(80), 117 + Hooks.lowerRightResfixX, 545 + Hooks.resfixY)
+					hook: new Text("ÿc4MF: ÿc0" + me.getStat(80), 117 + Hooks.statBoxAResFixX, 545 + Hooks.statBoxAResFixY)
 				});
 
 				break;
 			case "statlineC":
 				this.hooks.push({
 					name: "statlineC",
-					hook: new Text("ÿc4FCR: ÿc0" + me.getStat(105), 617 + Hooks.lowerRightResfixX, 535 + Hooks.resfixY)
+					hook: new Text("ÿc4FCR: ÿc0" + me.getStat(105), 617 + Hooks.statBoxBResFixX + Hooks.statBoxBTextResFixX, 535 + Hooks.statBoxBResFixY)
 				});
 
 				break;
 			case "statlineD":
 				this.hooks.push({
 					name: "statlineD",
-					hook: new Text("ÿc4FHR: ÿc0" + me.getStat(99), 617 + Hooks.lowerRightResfixX, 545 + Hooks.resfixY)
+					hook: new Text("ÿc4FHR: ÿc0" + me.getStat(99), 617 + Hooks.statBoxBResFixX + Hooks.statBoxBTextResFixX, 545 + Hooks.statBoxBResFixY)
 				});
 
 				break;
