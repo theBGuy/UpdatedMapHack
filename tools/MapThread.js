@@ -19,6 +19,7 @@ var Hooks = {
 	statBoxBResFixX: me.screensize ? 0 : -600,
 	statBoxBResFixY: me.screensize ? 0 : -413,
 	statBoxBTextResFixX: me.screensize ? 0 : -5,
+	statBoxBWidthResFixX: me.screensize ? 0 : 10,
 	resfixX: me.screensize ? 0 : -85,
 	resfixY: me.screensize ? 0 : -120,
 	upperRightResfixX: me.screensize ? 0 : -160,
@@ -1270,14 +1271,14 @@ var Hooks = {
 			case "statBoxB":
 				this.hooks.push({
 					name: "statBoxB",
-					hook: new Box(Hooks.statBoxBX + Hooks.statBoxBResFixX, Hooks.statBoxBY + Hooks.statBoxBResFixY, 80, 30, 0x0, 1, 2)
+					hook: new Box(Hooks.statBoxBX + Hooks.statBoxBResFixX, Hooks.statBoxBY + Hooks.statBoxBResFixY, 70 + Hooks.statBoxBWidthResFixX, 30, 0x0, 1, 2)
 				});
 
 				break;
 			case "statFrameB":
 				this.hooks.push({
 					name: "statFrameB",
-					hook: new Frame(Hooks.statBoxBX + Hooks.statBoxBResFixX, Hooks.statBoxBY + Hooks.statBoxBResFixY, 80, 30, 2)
+					hook: new Frame(Hooks.statBoxBX + Hooks.statBoxBResFixX, Hooks.statBoxBY + Hooks.statBoxBResFixY, 70 + Hooks.statBoxBWidthResFixX, 30, 2)
 				});
 
 				break;
