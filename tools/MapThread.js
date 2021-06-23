@@ -1624,6 +1624,11 @@ var Hooks = {
 				}
 
 				break;
+			case 73: // Duriels Lair
+				unit = {x: 22577, y: 15609},
+				name = "Tyrael";
+
+				break;
 			case 78: // Flayer Jungle
 				unit = getPresetUnit(me.area, 2, 252);
 				name = "Gidbinn";
@@ -2535,23 +2540,23 @@ function main() {
 
 	this.keyEvent = function (key) {
 		switch (key) {
-		case 57: // Numkey 8
+		case 56: // Numkey 8
 			if (Hooks.monsters.enabled) {
 				Hooks.monsters.enabled = false;
-				Hooks.text.getHook("monsterStatus").hook.text = "Num 7: Enable Monsters";
+				Hooks.text.getHook("monsterStatus").hook.text = "Key 8: Enable Monsters";
 			} else {
 				Hooks.monsters.enabled = true;
-				Hooks.text.getHook("monsterStatus").hook.text = "Num 7: Disable Monsters";
+				Hooks.text.getHook("monsterStatus").hook.text = "Key 8: Disable Monsters";
 			}
 
 			break;
-		case 58: // Numkey 9
+		case 57: // Numkey 9
 			if (Hooks.vector.enabled) {
 				Hooks.vector.enabled = false;
-				Hooks.text.getHook("vectorStatus").hook.text = "Num 8: Enable Vectors";
+				Hooks.text.getHook("vectorStatus").hook.text = "Key 9: Enable Vectors";
 			} else {
 				Hooks.vector.enabled = true;
-				Hooks.text.getHook("vectorStatus").hook.text = "Num 8: Disable Vectors";
+				Hooks.text.getHook("vectorStatus").hook.text = "Key 9: Disable Vectors";
 			}
 
 			break;

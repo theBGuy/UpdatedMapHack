@@ -71,6 +71,40 @@ function main() {
 						break;
 					case "unit":
 						if (me.area === 39) { break; }
+						if (me.area === 73) {
+							let teleport = Pather.teleport;
+							Pather.teleport = false;
+							Pather.moveTo(22629, 15714);
+							Pather.moveTo(22609, 15707);
+							Pather.moveTo(22579, 15704);
+							Pather.moveTo(22577, 15649, 10);
+							Pather.moveTo(22577, 15609, 10);
+
+							let tyrael = getUnit(1, NPC.Tyrael);
+
+							if (!tyrael) {
+								return false;
+							}
+
+							for (let talk = 0; talk < 3; talk += 1) {
+								if (getDistance(me, tyrael) > 3) {
+									Pather.moveToUnit(tyrael);
+								}
+
+								tyrael.interact();
+								delay(1000 + me.ping);
+								me.cancel();
+
+								if (Pather.getPortal(null)) {
+									me.cancel();
+									break;
+								}
+							}
+
+							Pather.teleport = teleport;
+							break;
+						}
+
 						Pather.moveToUnit(obj.dest, true);
 
 						if (me.area === 74) {
@@ -103,8 +137,10 @@ function main() {
 
 							break;
 						case getRoom().correcttomb:
-							if (getUnit(2, 100)) {
-								Pather.useUnit(2, 100, 73);
+							for (let i = 0; i < 3; i++) {
+								if (Pather.useUnit(2, 100, 73)) {
+									break;
+								}
 							}
 							
 							break;
