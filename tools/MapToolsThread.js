@@ -1,6 +1,7 @@
 /**
-*	@filename	ToolsThread.js
-*	@author		kolton
+*	@filename	MapToolsThread.js
+*	@author		theBGuy
+* 	@credits	kolton
 *	@desc		several tools to help the player - potion use, chicken, Diablo clone stop, map reveal, quit with player
 */
 
@@ -41,7 +42,7 @@ function main() {
 		canQuit = true,
 		timerLastDrink = [];
 
-	print("ÿc3Start ToolsThread script");
+	print("ÿc3Start MapToolsThread script");
 	D2Bot.init();
 	Config.init(false);
 	Pickit.init(false);
@@ -428,27 +429,9 @@ function main() {
 				print("Merc stats:\n" + this.getStatsString(merc));
 
 			break;
-		case 101: // numpad 5
-			if (AutoMule.getInfo() && AutoMule.getInfo().hasOwnProperty("muleInfo")) {
-				if (AutoMule.getMuleItems().length > 0) {
-					print("ÿc2Mule triggered");
-					scriptBroadcast("mule");
-					this.exit();
-				} else {
-					me.overhead("No items to mule.");
-				}
-			} else {
-				me.overhead("Profile not enabled for muling.");
-			}
-
-			break;
-		case 102: // Numpad 6
+		case 109: // Numpad -
 			MuleLogger.logChar();
 			me.overhead("Logged char: " + me.name);
-
-			break;
-		case 109: // Numpad -
-			Misc.spy(me.name);
 
 			break;
 		case 110: // decimal point
@@ -457,7 +440,7 @@ function main() {
 			break;
 		case 111: // numpad / - get nearest preset unit id
 			print(this.getNearestPreset());
-
+			
 			break;
 		case 106: // numpad * - precast
 			Precast.doPrecast(true);
@@ -590,7 +573,6 @@ function main() {
 	addEventListener("keyup", this.keyEvent);
 	addEventListener("gameevent", this.gameEvent);
 	addEventListener("scriptmsg", this.scriptEvent);
-	//addEventListener("gamepacket", Events.gamePacket);
 
 	// Load Fastmod
 	Packet.changeStat(105, Config.FCR);

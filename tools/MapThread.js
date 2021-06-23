@@ -1223,14 +1223,14 @@ var Hooks = {
 			case "monsterStatus":
 				this.hooks.push({
 					name: "monsterStatus",
-					hook: new Text("Num 7: Disable Monsters", 445 + Hooks.lowerRightResfixX, 535 + Hooks.resfixY)
+					hook: new Text("Key 8: Disable Monsters", 445 + Hooks.lowerRightResfixX, 535 + Hooks.resfixY)
 				});
 
 				break;
 			case "vectorStatus":
 				this.hooks.push({
 					name: "vectorStatus",
-					hook: new Text("Num 8: Disable Vectors", 445 + Hooks.lowerRightResfixX, 545 + Hooks.resfixY)
+					hook: new Text("Key 9: Disable Vectors", 445 + Hooks.lowerRightResfixX, 545 + Hooks.resfixY)
 				});
 
 				break;
@@ -1829,7 +1829,7 @@ var Hooks = {
 					obj.type = "area";
 
 					break;
-				case 54: // 6
+				case 101: // Numpad 5
 					switch (me.area) {
 					case 76:
 						hook = this.getHook("Spider Cave");
@@ -1862,7 +1862,7 @@ var Hooks = {
 					}
 
 					break;
-				case 55: // 7
+				case 102: // Numpad 6
 					switch (me.area) {
 					case 81:
 						hook = this.getHook("Forgotten Temple");
@@ -1883,7 +1883,7 @@ var Hooks = {
 					}
 
 					break;
-				case 56: // 8
+				case 103: // Numpad 7
 					if (me.area === 109) {
 						hook = this.getHook("Furnace");
 						obj.type = "portal";	
@@ -1895,7 +1895,7 @@ var Hooks = {
 					}
 
 					break;
-				case 57: // 9
+				case 104: // Numpad 8
 					hook = this.getHook("Uber Tristam");
 					obj.type = "portal";
 
@@ -1942,7 +1942,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Spider Cave",
 					destination: 84,
-					hook: new Text("ÿc<NumKey 6: " + Pather.getAreaName(84), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc<Num 5: " + Pather.getAreaName(84), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1950,7 +1950,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Swampy Pit Level 1",
 					destination: 86,
-					hook: new Text("ÿc<NumKey 6: Swampy Pit Level 1", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc<Num 5: Swampy Pit Level 1", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1958,7 +1958,7 @@ var Hooks = {
 				this.hooks.push({
 					name: "Disused Fane",
 					destination: 95,
-					hook: new Text("ÿc<NumKey 6: " + Pather.getAreaName(95), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc<Num 5: " + Pather.getAreaName(95), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1966,13 +1966,13 @@ var Hooks = {
 				this.hooks.push({
 					name: "Forgotten Temple",
 					destination: 97,
-					hook: new Text("ÿc<NumKey 7: " + Pather.getAreaName(97), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc<Num 6: " + Pather.getAreaName(97), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				this.hooks.push({
 					name: "Forgotten Reliquary",
 					destination: 96,
-					hook: new Text("ÿc<NumKey 6: " + Pather.getAreaName(96), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc<Num 5: " + Pather.getAreaName(96), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1980,13 +1980,13 @@ var Hooks = {
 				this.hooks.push({
 					name: "Ruined Fane",
 					destination: 98,
-					hook: new Text("ÿc<NumKey 7: " + Pather.getAreaName(98), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc<Num 6: " + Pather.getAreaName(98), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				this.hooks.push({
 					name: "Disused Reliquary",
 					destination: 99,
-					hook: new Text("ÿc<NumKey 6: " + Pather.getAreaName(99), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					hook: new Text("ÿc<Num 5: " + Pather.getAreaName(99), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 
 				break;
@@ -1997,7 +1997,7 @@ var Hooks = {
 					this.hooks.push({
 						name: "Infector Seal",
 						destination: {x: infSeal.x, y: infSeal.y},
-						hook: new Text("ÿc<NumKey 8: Infector Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+						hook: new Text("ÿc<Num 7: Infector Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 				}
 
@@ -2007,7 +2007,7 @@ var Hooks = {
 					this.hooks.push({
 						name: "Seis Seal",
 						destination: {x: seisSeal.x, y: seisSeal.y},
-						hook: new Text("ÿc<NumKey 7: Seis Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+						hook: new Text("ÿc<Num 6: Seis Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 				}
 
@@ -2017,7 +2017,7 @@ var Hooks = {
 					this.hooks.push({
 						name: "Viz Seal",
 						destination: {x: vizSeal.x, y: vizSeal.y},
-						hook: new Text("ÿc<NumKey 6: Viz Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+						hook: new Text("ÿc<Num 5: Viz Seal", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 				}
 
@@ -2226,7 +2226,7 @@ var Hooks = {
 						this.portals.push({
 							name: "Matron's Den",
 							destination: 133,
-							hook: new Text("ÿc1NumKey 6: Matron's Den", Hooks.portalX, Hooks.portalY + Hooks.resfixY)
+							hook: new Text("ÿc1Num 5: Matron's Den", Hooks.portalX, Hooks.portalY + Hooks.resfixY)
 						});
 
 						break;
@@ -2234,7 +2234,7 @@ var Hooks = {
 						this.portals.push({
 							name: "Sands",
 							destination: 134,
-							hook: new Text("ÿc1NumKey 7: Forgotten Sands", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 15)
+							hook: new Text("ÿc1Num 6: Forgotten Sands", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 15)
 						});
 
 						break;
@@ -2242,7 +2242,7 @@ var Hooks = {
 						this.portals.push({
 							name: "Furnace",
 							destination: 135,
-							hook: new Text("ÿc1NumKey 8: Furnace of Pain", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 30)
+							hook: new Text("ÿc1Num 7: Furnace of Pain", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 30)
 						});
 
 						break;
@@ -2250,7 +2250,7 @@ var Hooks = {
 						this.portals.push({
 							name: "Uber Tristam",
 							destination: 136,
-							hook: new Text("ÿc1NumKey 9: Furnace of Pain", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 45)
+							hook: new Text("ÿc1Num 8: " + Pather.getAreaNam(136), Hooks.portalX, Hooks.portalY + Hooks.resfixY + 45)
 						});
 
 						break;
@@ -2535,7 +2535,7 @@ function main() {
 
 	this.keyEvent = function (key) {
 		switch (key) {
-		case 103: // Numpad 7
+		case 57: // Numkey 8
 			if (Hooks.monsters.enabled) {
 				Hooks.monsters.enabled = false;
 				Hooks.text.getHook("monsterStatus").hook.text = "Num 7: Enable Monsters";
@@ -2545,7 +2545,7 @@ function main() {
 			}
 
 			break;
-		case 104: // Numpad 8
+		case 58: // Numkey 9
 			if (Hooks.vector.enabled) {
 				Hooks.vector.enabled = false;
 				Hooks.text.getHook("vectorStatus").hook.text = "Num 8: Enable Vectors";
