@@ -1056,9 +1056,6 @@ var Hooks = {
 			case 134:
 			case 135:
 			case 136:
-				this.frameYSizeScale = -30;
-				this.frameYLocScale = 30;
-				break;
 			case 2:
 			case 7:
 			case 10:
@@ -1166,6 +1163,10 @@ var Hooks = {
 				this.add("statlineD");
 			}
 
+			if (!this.getHook("itemStatus")) {
+				this.add("itemStatus");
+			}
+
 			if (!this.getHook("monsterStatus")) {
 				this.add("monsterStatus");
 			}
@@ -1250,6 +1251,13 @@ var Hooks = {
 				this.hooks.push({
 					name: "ip",
 					hook: new Text("IP: " + (me.gameserverip.length > 0 ? me.gameserverip.split(".")[3] : "0"), 785 + Hooks.upperRightResfixX, 88 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename)), 4, 1, 1)
+				});
+
+				break;
+			case "itemStatus":
+				this.hooks.push({
+					name: "itemStatus",
+					hook: new Text("Key 7: Disable Item Filter", 445 + Hooks.lowerRightResfixX, 525 + Hooks.resfixY)
 				});
 
 				break;
@@ -2577,6 +2585,16 @@ function main() {
 
 	this.keyEvent = function (key) {
 		switch (key) {
+		case 55: // Numkey 7
+			if (Hooks.items.enabled) {
+				Hooks.items.enabled = false;
+				Hooks.text.getHook("itemStatus").hook.text = "Key 7: Enable Item Filter";
+			} else {
+				Hooks.items.enabled = true;
+				Hooks.text.getHook("itemStatus").hook.text = "Key 7: Disable Item Filter";
+			}
+
+			break;
 		case 56: // Numkey 8
 			if (Hooks.monsters.enabled) {
 				Hooks.monsters.enabled = false;
