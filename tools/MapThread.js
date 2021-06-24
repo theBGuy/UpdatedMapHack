@@ -47,10 +47,17 @@ var Hooks = {
 						this.hooks[i].hook[j].remove();
 					}
 
-					this.hooks[i].name[0].remove();
-					this.hooks[i].vector[0].remove();
+					if (this.hooks[i].name[0]) {
+						this.hooks[i].name[0].remove();
+					}
+
+					if (this.hooks[i].vector[0]) {
+						this.hooks[i].vector[0].remove();
+					}
+					
 					this.hooks.splice(i, 1);
 					i -= 1;
+					this.flush();
 				}
 			}
 
@@ -610,6 +617,10 @@ var Hooks = {
 		},
 
 		add: function (item) {
+			if (item === undefined || !item.classid) {
+				return;
+			}
+
 			let temp = this.newHook(item);
 
 			this.hooks.push({
@@ -641,8 +652,14 @@ var Hooks = {
 						this.hooks[i].hook[j].remove();
 					}
 					
-					this.hooks[i].name[0].remove();
-					this.hooks[i].vector[0].remove();
+					if (this.hooks[i].name[0]) {
+						this.hooks[i].name[0].remove();
+					}
+
+					if (this.hooks[i].vector[0]) {
+						this.hooks[i].vector[0].remove();
+					}
+
 					this.hooks.splice(i, 1);
 
 					return true;
@@ -658,8 +675,14 @@ var Hooks = {
 					this.hooks[0].hook[j].remove();
 				}
 
-				this.hooks[0].name[0].remove();
-				this.hooks[0].vector[0].remove();
+				if (this.hooks[0].name[0]) {
+					this.hooks[0].name[0].remove();
+				}
+
+				if (this.hooks[0].vector[0]) {
+					this.hooks[0].vector[0].remove();
+				}
+
 				this.hooks.shift();
 			}
 
@@ -792,7 +815,7 @@ var Hooks = {
 			var i, shrine;
 
 			for (i = 0; i < this.hooks.length; i += 1) {
-				if (!copyUnit(this.hooks[i].shrine).x) {
+				if (!copyUnit(this.hooks[i].shrine).objtype) {
 					this.hooks[i].hook[0].remove();
 					this.hooks.splice(i, 1);
 
@@ -891,6 +914,10 @@ var Hooks = {
 		},
 
 		add: function (shrine) {
+			if (!shrine.objtype) {
+				return;
+			}
+
 			this.hooks.push({
 				shrine: copyUnit(shrine),
 				hook: this.newHook(shrine)
@@ -2424,9 +2451,13 @@ var Hooks = {
 				case 134:
 				case 135:
 				case 136:
+					if (me.area === 136) {
+						entrance = {x: 25105, y: 5140};
+					}
+
 					this.hooks.push({
 						name: "Previous Area",
-						destination: 109,
+						destination: entrance,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(109), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
