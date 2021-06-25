@@ -842,6 +842,9 @@ var Hooks = {
 			var arr = [];
 
 			switch (shrine.objtype) {
+				case 0:
+					arr.push(new Text("Health", shrine.x, shrine.y, 4, 6, 2, true));
+					break;
 				case 1:
 					arr.push(new Text("Refilling", shrine.x, shrine.y, 4, 6, 2, true));
 					break;
@@ -1758,7 +1761,7 @@ var Hooks = {
 
 				break;
 			case 131: // Throne of Destruction
-				unit = {x: 15095, y: 5029};
+				unit = {x: 15118, y: 5002};
 				name = "Throne Room";
 
 				break;
