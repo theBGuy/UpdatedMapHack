@@ -1905,7 +1905,7 @@ var Hooks = {
 						obj.type = "unit";
 						break;
 					case 109:
-						hook = this.getHook("Matron's Den");
+						hook = this.getPortalHook("Matron's Den");
 						obj.type = "portal";
 						break;
 					}
@@ -1926,26 +1926,26 @@ var Hooks = {
 						obj.type = "unit";
 						break;
 					case 109:
-						hook = this.getHook("Sands");
+						hook = this.getPortalHook("Sands");
 						obj.type = "portal";
 						break;
 					}
 
 					break;
 				case 103: // Numpad 7
-					if (me.area === 109) {
-						hook = this.getHook("Furnace");
-						obj.type = "portal";	
-					}
-					
 					if (me.area === 108) {
 						hook = this.getHook("Infector Seal");
 						obj.type = "unit";
 					}
 
+					if (me.area === 109) {
+						hook = this.getPortalHook("Furnace");
+						obj.type = "portal";	
+					}
+					
 					break;
 				case 104: // Numpad 8
-					hook = this.getHook("Uber Tristam");
+					hook = this.getPortalHook("Uber Tristam");
 					obj.type = "portal";
 
 					break;
@@ -2256,7 +2256,7 @@ var Hooks = {
 				});
 			}
 
-			let uberPortals = me.area === 109 && me.diff === 2 ? getUnit(2, "portal") : false;
+			let uberPortals = (me.area === 109 && me.diff === 2) ? getUnit(2, "portal") : false;
 
 			if (uberPortals && [133, 134, 135, 136].indexOf(uberPortals.objtype) > -1) {
 				this.frame.push({
@@ -2269,41 +2269,36 @@ var Hooks = {
 					hook: new Frame(Hooks.portalX - 8, Hooks.portalY + Hooks.resfixY - 17, 190, 70 , 0)
 				});
 
-				if ([133, 134, 135, 136].indexOf(uberPortals.objtype) > -1) {
-					switch (uberPortals.objtype) {
-					case 133:
-						this.portals.push({
-							name: "Matron's Den",
-							destination: 133,
-							hook: new Text("ÿc1Num 5: Matron's Den", Hooks.portalX, Hooks.portalY + Hooks.resfixY)
-						});
+				if (Pather.getPortal(133)) {
+					this.portals.push({
+						name: "Matron's Den",
+						destination: 133,
+						hook: new Text("ÿc1Num 5: Matron's Den", Hooks.portalX, Hooks.portalY + Hooks.resfixY)
+					});
+				}
 
-						break;
-					case 134:
-						this.portals.push({
-							name: "Sands",
-							destination: 134,
-							hook: new Text("ÿc1Num 6: Forgotten Sands", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 15)
-						});
+				if (Pather.getPortal(134)) {
+					this.portals.push({
+						name: "Sands",
+						destination: 134,
+						hook: new Text("ÿc1Num 6: Forgotten Sands", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 15)
+					});
+				}
 
-						break;
-					case 135:
-						this.portals.push({
-							name: "Furnace",
-							destination: 135,
-							hook: new Text("ÿc1Num 7: Furnace of Pain", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 30)
-						});
+				if (Pather.getPortal(135)) {
+					this.portals.push({
+						name: "Furnace",
+						destination: 135,
+						hook: new Text("ÿc1Num 7: Furnace of Pain", Hooks.portalX, Hooks.portalY + Hooks.resfixY + 30)
+					});
+				}
 
-						break;
-					case 136:
-						this.portals.push({
-							name: "Uber Tristam",
-							destination: 136,
-							hook: new Text("ÿc1Num 8: " + Pather.getAreaNam(136), Hooks.portalX, Hooks.portalY + Hooks.resfixY + 45)
-						});
-
-						break;
-					}
+				if (Pather.getPortal(136)) {
+					this.portals.push({
+						name: "Uber Tristam",
+						destination: 136,
+						hook: new Text("ÿc1Num 8: " + Pather.getAreaNam(136), Hooks.portalX, Hooks.portalY + Hooks.resfixY + 45)
+					});
 				}
 
 			}
@@ -2459,8 +2454,29 @@ var Hooks = {
 
 					break;
 				case 133:
+					if (me.area === 133) {
+						let lilith = getPresetUnit(me.area, 2, 397);
+
+						switch (lilith.x) {
+							case 11:
+								entrance = {x: 20023, y: 7643};
+								break;
+						}
+					}
 				case 134:
+					if (me.area === 134) {
+						entrance = {x: 20193, y: 8693};
+					}
 				case 135:
+					if (me.area === 135) {
+						let izual = getPresetUnit(me.area, 2, 397);
+
+						switch (izual.x) {
+							case 15:
+								entrance = {x: 20138, y: 14563};
+								break;
+						}
+					}
 				case 136:
 					if (me.area === 136) {
 						entrance = {x: 25105, y: 5140};
@@ -2515,6 +2531,18 @@ var Hooks = {
 			for (i = 0; i < this.hooks.length; i += 1) {
 				if (this.hooks[i].name === name) {
 					return this.hooks[i];
+				}
+			}
+
+			return false;
+		},
+
+		getPortalHook: function (name) {
+			var i;
+
+			for (i = 0; i < this.portals.length; i += 1) {
+				if (this.portals[i].name === name) {
+					return this.portals[i];
 				}
 			}
 

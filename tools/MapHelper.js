@@ -233,7 +233,49 @@ function main() {
 							break;
 						}
 
-						Pather.usePortal(obj.dest);
+						let redPortal;
+
+						switch (obj.dest) {
+						case 133:
+							redPortal = Pather.getPortal(133);
+
+							if (redPortal) {
+								Pather.moveToUnit(redPortal);
+								Pather.usePortal(null, null, redPortal);
+							}
+
+							break;
+						case 134:
+							redPortal = Pather.getPortal(134);
+							
+							if (redPortal) {
+								Pather.moveToUnit(redPortal);
+								Pather.usePortal(null, null, redPortal);
+							}
+							
+							break;
+						case 135:
+							redPortal = Pather.getPortal(135);
+							
+							if (redPortal) {
+								Pather.moveToUnit(redPortal);
+								Pather.usePortal(null, null, redPortal);
+							}
+							
+							break;
+						case 136:
+							redPortal = Pather.getPortal(136);
+							
+							if (redPortal) {
+								Pather.moveToUnit(redPortal);
+								Pather.usePortal(null, null, redPortal);
+							}
+							
+							break;
+						default:
+							Pather.usePortal(obj.dest);
+							break;
+						}
 
 						break;
 					}
