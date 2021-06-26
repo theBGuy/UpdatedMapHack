@@ -1390,42 +1390,42 @@ var Hooks = {
 			case "qolBox":
 				this.hooks.push({
 					name: "qolBox",
-					hook: new Box(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 130, 30, 0x0, 1, 2)
+					hook: new Box(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 135, 30, 0x0, 1, 2)
 				});
 
 				break;
 			case "qolFrame":
 				this.hooks.push({
 					name: "qolFrame",
-					hook: new Frame(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 130, 30, 2)
+					hook: new Frame(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 135, 30, 2)
 				});
 
 				break;
 			case "nonTownQolsA":
 				this.hooks.push({
 					name: "nonTownQolsA",
-					hook: new Text("Key 5: Make Portal", 658 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 5: Make Portal", 656 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
 			case "nonTownQolsB":
 				this.hooks.push({
 					name: "nonTownQolsB",
-					hook: new Text("Key 6: Go To Town", 658 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 6: Go To Town", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
 			case "townQolsA":
 				this.hooks.push({
 					name: "townQolsA",
-					hook: new Text("Key 5: Init Heal", 658 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 5: Go To Healer", 656 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
 			case "townQolsB":
 				this.hooks.push({
 					name: "townQolsB",
-					hook: new Text("Key 6: Open Stash", 658 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 6: Open Stash", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
@@ -1689,8 +1689,8 @@ var Hooks = {
 
 				break;
 			case 39: // Cow King
-				if (getUnit(1, "The Cow King")) {
-					unit = getUnit(1, "The Cow King");
+				if (getUnit(1, 743)) {
+					unit = getUnit(1, 743);
 				} else {
 					unit = getPresetUnit(me.area, 1, 773);
 				}
@@ -1937,9 +1937,9 @@ var Hooks = {
 				case 97: // Numpad 1
 					hook = this.getHook("Previous Area");
 
-					if ([39, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+					if ([133, 134, 135, 136].indexOf(me.area) > -1) {
 						obj.type = "unit";
-					} else if (me.area === 38) {
+					} else if ([38, 39, 125, 126, 127].indexOf(me.area) > -1) {
 						obj.type = "portal";
 					} else {
 						obj.type = "area";
@@ -2471,93 +2471,33 @@ var Hooks = {
 
 					break;
 				case 39:
-					let king = getPresetUnit(me.area, 1, 773);
-
-					switch (king.x) {
-					case 1:
-						entrance = {x: 25183, y: 5923};
-
-						break;
-					}
-
 					this.hooks.push({
 						name: "Previous Area",
-						destination: entrance,
+						destination: 1,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(1), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
 					break;
 				case 125: 	// Abadon
-					chest = getPresetUnit(me.area, 2, 397);
-
-					switch (chest.x) {
-					case 14:
-						entrance = {x: 12638, y: 6373};
-
-						break;
-					case 15:
-						entrance = {x: 12638, y: 6063};
-
-						break;
-					case 20:
-						entrance = {x: 12708, y: 6063};
-
-						break;
-					}
-
 					this.hooks.push({
 						name: "Previous Area",
-						destination: entrance,
+						destination: 111,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(111), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
 					break;
 				case 126:
-					chest = getPresetUnit(me.area, 2, 397);
-
-					switch (chest.x) {
-					case 14:
-						entrance = {x: 12638, y: 7873};
-
-						break;
-					case 15:
-						entrance = {x: 12638, y: 7563};
-
-						break;
-					case 25:
-						entrance = {x: 12948, y: 7628};
-
-						break;
-					}
-
 					this.hooks.push({
 						name: "Previous Area",
-						destination: entrance,
+						destination: 112,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(112), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
 					break;
 				case 127:
-					chest = getPresetUnit(me.area, 2, 397);
-
-					switch (chest.x) {
-					case 14:
-						entrance = {x: 12638, y: 9373};
-
-						break;
-					case 20:
-						entrance = {x: 12708, y: 9063};
-
-						break;
-					case 25:
-						entrance = {x: 12948, y: 9128};
-
-						break;
-					}
-
 					this.hooks.push({
 						name: "Previous Area",
-						destination: entrance,
+						destination: 117,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(117), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 

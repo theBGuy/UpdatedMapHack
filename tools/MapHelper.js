@@ -119,10 +119,6 @@ function main() {
 							}
 						}
 
-						if ([4, 39, 54, 109, 111, 112, 117, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
-							Pather.usePortal();
-						}
-
 						switch (me.area) {
 						case 3: 	// Cold Plains -> Cave Level 1
 							Pather.moveToExit(9, true);
@@ -218,6 +214,10 @@ function main() {
 							Misc.openChest(chest);
 						}
 
+						if ([4, 39, 54, 109, 111, 112, 117, 133, 134, 135, 136].indexOf(me.area) > -1) {
+							Pather.usePortal();
+						}
+
 						break;
 					case "wp":
 						Pather.getWP(me.area);
@@ -237,9 +237,27 @@ function main() {
 							break;
 						}
 
-						let redPortal;
+						let redPortal, chestLoc;
 
 						switch (obj.dest) {
+						case 1:
+							let king = getPresetUnit(me.area, 1, 773);
+
+							switch (king.x) {
+							case 1:
+								Pather.moveTo(25183, 5923);
+
+								break;
+							}
+
+							redPortal = Pather.getPortal(1);
+
+							if (redPortal) {
+								Pather.moveToUnit(redPortal);
+								Pather.usePortal(null, null, redPortal);
+							}
+
+							break;
 						case 4:
 							Pather.moveTo(25173, 5086);
 							redPortal = Pather.getPortal(4);
@@ -257,6 +275,77 @@ function main() {
 								Pather.moveToUnit(redPortal);
 								Pather.usePortal(null, null, redPortal);
 							}
+
+							break;
+						case 111:
+							chestLoc = getPresetUnit(me.area, 2, 397);
+
+							switch (chestLoc.x) {
+							case 14:
+								Pather.moveTo(12638, 6373);
+
+								break;
+							case 15:
+								Pather.moveTo(12638, 6063);
+
+								break;
+							case 20:
+								Pather.moveTo(12708, 6063);
+
+								break;
+							case 25:
+								Pather.moveTo(12948, 6128);
+
+								break;
+							}
+
+							Pather.usePortal();
+
+							break;
+						case 112:
+							chestLoc = getPresetUnit(me.area, 2, 397);
+
+							switch (chestLoc.x) {
+							case 14:
+								Pather.moveTo(12638, 7873);
+
+								break;
+							case 15:
+								Pather.moveTo(12638, 7563);
+
+								break;
+							case 20:
+								Pather.moveTo(12708, 7563);
+
+								break;
+							case 25:
+								Pather.moveTo(12948, 7628);
+
+								break;
+							}
+
+							Pather.usePortal();
+
+							break;
+						case 117:
+							chestLoc = getPresetUnit(me.area, 2, 397);
+
+							switch (chestLoc.x) {
+							case 14:
+								Pather.moveTo(12638, 9373);
+
+								break;
+							case 20:
+								Pather.moveTo(12708, 9063);
+
+								break;
+							case 25:
+								Pather.moveTo(12948, 9128);
+
+								break;
+							}
+
+							Pather.usePortal();
 
 							break;
 						case 133:
