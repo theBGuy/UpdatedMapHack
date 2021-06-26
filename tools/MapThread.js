@@ -14,12 +14,16 @@ var Hooks = {
 	statBoxAY: 520,
 	statBoxBX: 645,
 	statBoxBY: 520,
+	qolBoxX: 715,
+	qolBoxY: 460,
 	statBoxAResFixX: me.screensize ? 0 : -106,
 	statBoxAResFixY: me.screensize ? 0 : -445,
 	statBoxBResFixX: me.screensize ? 0 : -600,
 	statBoxBResFixY: me.screensize ? 0 : -413,
 	statBoxBTextResFixX: me.screensize ? 0 : -5,
 	statBoxBWidthResFixX: me.screensize ? 0 : 10,
+	qolBoxResFixX: me.screensize ? 0 : -645,
+	qolBoxResFixY: me.screensize ? 0 : -320,
 	resfixX: me.screensize ? 0 : -85,
 	resfixY: me.screensize ? 0 : -120,
 	upperRightResfixX: me.screensize ? 0 : -160,
@@ -1126,12 +1130,40 @@ var Hooks = {
 
 			this.getScale();
 
+			if (!this.getHook("credits")) {
+				this.add("credits");
+			}
+
 			if (!this.getHook("dashboard")) {
 				this.add("dashboard");
 			}
 
 			if (!this.getHook("dashboardframe")) {
 				this.add("dashboardframe");
+			}
+
+			if (!this.getHook("qolBox")) {
+				this.add("qolBox");
+			}
+
+			if (!this.getHook("qolFrame")) {
+				this.add("qolFrame");
+			}
+
+			if (!this.getHook("nonTownQolsA") && !me.inTown) {
+				this.add("nonTownQolsA");
+			}
+
+			if (!this.getHook("nonTownQolsB") && !me.inTown) {
+				this.add("nonTownQolsB");
+			}
+
+			if (!this.getHook("townQolsA") && me.inTown) {
+				this.add("townQolsA");
+			}
+
+			if (!this.getHook("townQolsB") && me.inTown) {
+				this.add("townQolsB");
 			}
 
 			if (!this.getHook("statBoxA")) {
@@ -1345,6 +1377,55 @@ var Hooks = {
 				this.hooks.push({
 					name: "statlineD",
 					hook: new Text("ÿc4FHR: ÿc0" + me.getStat(99), 617 + Hooks.statBoxBResFixX + Hooks.statBoxBTextResFixX, 545 + Hooks.statBoxBResFixY)
+				});
+
+				break;
+			case "credits":
+				this.hooks.push({
+					name: "credits",
+					hook: new Text("MH by theBGuy", 0 + Hooks.lowerLeftResfixX, 600 + Hooks.resfixY, 4, 0, 0)
+				});
+
+				break;
+			case "qolBox":
+				this.hooks.push({
+					name: "qolBox",
+					hook: new Box(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 130, 30, 0x0, 1, 2)
+				});
+
+				break;
+			case "qolFrame":
+				this.hooks.push({
+					name: "qolFrame",
+					hook: new Frame(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 130, 30, 2)
+				});
+
+				break;
+			case "nonTownQolsA":
+				this.hooks.push({
+					name: "nonTownQolsA",
+					hook: new Text("Key 5: Make Portal", 658 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
+				});
+
+				break;
+			case "nonTownQolsB":
+				this.hooks.push({
+					name: "nonTownQolsB",
+					hook: new Text("Key 6: Go To Town", 658 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
+				});
+
+				break;
+			case "townQolsA":
+				this.hooks.push({
+					name: "townQolsA",
+					hook: new Text("Key 5: Init Heal", 658 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
+				});
+
+				break;
+			case "townQolsB":
+				this.hooks.push({
+					name: "townQolsB",
+					hook: new Text("Key 6: Open Stash", 658 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
@@ -1856,8 +1937,10 @@ var Hooks = {
 				case 97: // Numpad 1
 					hook = this.getHook("Previous Area");
 
-					if ([38, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+					if ([39, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
 						obj.type = "unit";
+					} else if (me.area === 38) {
+						obj.type = "portal";
 					} else {
 						obj.type = "area";
 					}
@@ -1880,6 +1963,14 @@ var Hooks = {
 					break;
 				case 101: // Numpad 5
 					switch (me.area) {
+					case 1:
+						hook = this.getHook("Moo Moo Farm");
+						obj.type = "portal";
+						break;
+					case 38:
+						hook = this.getHook("Wirt's Leg");
+						obj.type = "unit";
+						break;
 					case 76:
 						hook = this.getHook("Spider Cave");
 						obj.type = "area";
@@ -1987,6 +2078,14 @@ var Hooks = {
 			}
 
 			switch (me.area) {
+			case 38:
+				this.hooks.push({
+					name: "Wirt's Leg",
+					destination: {x: 25048, y: 5177},
+					hook: new Text("ÿc<Num 5: Wirt's Leg", 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+
+				break;
 			case 76:
 				this.hooks.push({
 					name: "Spider Cave",
@@ -2246,6 +2345,16 @@ var Hooks = {
 				});
 			}
 
+			let cowPortal = me.area === 1 ? getUnit(2, 60) : false;
+
+			if (cowPortal && cowPortal.objtype === 39) {
+				this.hooks.push({
+					name: "Moo Moo Farm",
+					destination: 39,
+					hook: new Text("ÿc<Num 5: " + Pather.getAreaName(39), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+			}
+
 			wp = Hooks.vector.getWP();
 
 			if (wp) {
@@ -2356,7 +2465,7 @@ var Hooks = {
 				case 38:
 					this.hooks.push({
 						name: "Previous Area",
-						destination: {x: 25173, y: 5086},
+						destination: 4,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(4), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
@@ -2366,7 +2475,7 @@ var Hooks = {
 
 					switch (king.x) {
 					case 1:
-						entrance = {x: 25188, y: 5923};
+						entrance = {x: 25183, y: 5923};
 
 						break;
 					}
@@ -2599,6 +2708,7 @@ function main() {
 	include("json2.js");
 	include("common/attack.js");
 	include("common/pather.js");
+	include("common/Prototypes.js");
 	load("tools/maphelper.js");
 	print("ÿc9Map Thread Loaded.");
 
@@ -2615,7 +2725,51 @@ function main() {
 	};
 
 	this.keyEvent = function (key) {
+		let book, qolObj = {
+				type: false,
+				dest: false,
+				action: false
+			};
+
 		switch (key) {
+		case 53: // Numkey 5
+			if (!me.inTown) {
+				book = me.getItem(518);
+
+				if (book && book.getStat(70) > 1) {
+					me.overhead("Making portal...tp's left: " + book.getStat(70));
+					Pather.makePortal();
+				}
+
+				break;
+			}
+
+			if (me.inTown) {
+				qolObj.type = "qol";
+				qolObj.action = "heal";
+				scriptBroadcast(JSON.stringify(qolObj));
+			}
+
+			break;
+		case 54: // Numkey 6
+			if (!me.inTown) {
+				book = me.getItem(518);
+
+				if (book && book.getStat(70) > 1) {
+					me.overhead("Going to town...tp's left: " + book.getStat(70));
+					Pather.makePortal(true);
+				}
+
+				break;
+			}
+
+			if (me.inTown) {
+				qolObj.type = "qol";
+				qolObj.action = "openStash";
+				scriptBroadcast(JSON.stringify(qolObj));
+			}
+
+			break;
 		case 55: // Numkey 7
 			if (Hooks.items.enabled) {
 				Hooks.items.enabled = false;

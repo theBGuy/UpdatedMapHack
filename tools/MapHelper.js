@@ -119,7 +119,7 @@ function main() {
 							}
 						}
 
-						if ([4, 38, 39, 54, 109, 111, 112, 117, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+						if ([4, 39, 54, 109, 111, 112, 117, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
 							Pather.usePortal();
 						}
 
@@ -180,6 +180,10 @@ function main() {
 							chest = getUnit(2, 455);
 
 							break;
+						case 38:
+							chest = getUnit(2, 268);
+
+							break;
 						case 60: // Halls of the Dead 3
 							chest = getUnit(2, 354);
 
@@ -236,6 +240,25 @@ function main() {
 						let redPortal;
 
 						switch (obj.dest) {
+						case 4:
+							Pather.moveTo(25173, 5086);
+							redPortal = Pather.getPortal(4);
+
+							if (redPortal) {
+								Pather.moveToUnit(redPortal);
+								Pather.usePortal(null, null, redPortal);
+							}
+
+							break;
+						case 39:
+							redPortal = Pather.getPortal(39);
+
+							if (redPortal) {
+								Pather.moveToUnit(redPortal);
+								Pather.usePortal(null, null, redPortal);
+							}
+
+							break;
 						case 133:
 							redPortal = Pather.getPortal(133);
 
@@ -274,6 +297,17 @@ function main() {
 							break;
 						default:
 							Pather.usePortal(obj.dest);
+							break;
+						}
+
+						break;
+					case "qol":
+						switch (obj.action) {
+						case "heal":
+							Town.initNPC("Heal", "heal");
+							break;
+						case "openStash":
+							Town.openStash();
 							break;
 						}
 
