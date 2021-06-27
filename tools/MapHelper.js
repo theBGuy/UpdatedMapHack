@@ -413,3 +413,178 @@ function main() {
 		delay(20);
 	}
 }
+
+Pather.moveTo = function (x, y, retry, clearPath, pop) {
+	if (me.dead) { // Abort if dead
+		return false;
+	}
+
+	var i, path, adjustedNode, cleared, useTeleport,
+		node = {x: x, y: y},
+		fail = 0;
+
+	for (i = 0; i < this.cancelFlags.length; i += 1) {
+		if (getUIFlag(this.cancelFlags[i])) {
+			me.cancel();
+		}
+	}
+
+	if (getDistance(me, x, y) < 2) {
+		return true;
+	}
+
+	if (x === undefined || y === undefined) {
+		throw new Error("moveTo: Function must be called with at least 2 arguments.");
+	}
+
+	if (typeof x !== "number" || typeof y !== "number") {
+		throw new Error("moveTo: Coords must be numbers");
+	}
+
+	if (retry === undefined) {
+		retry = 3;
+	}
+
+	if (clearPath === undefined) {
+		clearPath = false;
+	}
+
+	if (pop === undefined) {
+		pop = false;
+	}
+
+	useTeleport = this.useTeleport();
+
+	let preSkill = me.getSkill(2);
+
+	/* Disabling getPath optimizations, they are causing desync -- noah
+	// Teleport without calling getPath if the spot is close enough
+	if (useTeleport && getDistance(me, x, y) <= this.teleDistance) {
+		//Misc.townCheck();
+
+		return this.teleportTo(x, y);
+	}
+
+	// Walk without calling getPath if the spot is close enough
+	if (!useTeleport && (getDistance(me, x, y) <= 5 || (getDistance(me, x, y) <= 25 && !CollMap.checkColl(me, {x: x, y: y}, 0x1)))) {
+		return this.walkTo(x, y);
+	}
+	*/
+
+	path = getPath(me.area, x, y, me.x, me.y, useTeleport ? 1 : 0, useTeleport ? ([62, 63, 64].indexOf(me.area) > -1 ? 30 : this.teleDistance) : this.walkDistance);
+
+	if (!path) {
+		throw new Error("moveTo: Failed to generate path.");
+	}
+
+	path.reverse();
+
+	if (pop) {
+		path.pop();
+	}
+
+	PathDebug.drawPath(path);
+
+	if (useTeleport && Config.TeleSwitch && path.length > 5) {
+		Attack.weaponSwitch(Attack.getPrimarySlot() ^ 1);
+	}
+
+	while (path.length > 0) {
+		if (me.dead) { // Abort if dead
+			return false;
+		}
+
+		for (i = 0; i < this.cancelFlags.length; i += 1) {
+			if (getUIFlag(this.cancelFlags[i])) {
+				me.cancel();
+			}
+		}
+
+		node = path.shift();
+
+		/* Right now getPath's first node is our own position so it's not necessary to take it into account
+			This will be removed if getPath changes
+		*/
+		if (getDistance(me, node) > 2) {
+			// Make life in Maggot Lair easier
+			if ([62, 63, 64].indexOf(me.area) > -1) {
+				adjustedNode = this.getNearestWalkable(node.x, node.y, 15, 3, 0x1 | 0x4 | 0x800 | 0x1000);
+
+				if (adjustedNode) {
+					node.x = adjustedNode[0];
+					node.y = adjustedNode[1];
+				}
+			}
+
+			if (useTeleport ? this.teleportTo(node.x, node.y) : this.walkTo(node.x, node.y, (fail > 0 || me.inTown) ? 2 : 4)) {
+				if (!me.inTown) {
+					if (this.recursion) {
+						this.recursion = false;
+
+						NodeAction.go({clearPath: clearPath});
+
+						if (getDistance(me, node.x, node.y) > 5) {
+							this.moveTo(node.x, node.y);
+						}
+
+						this.recursion = true;
+					}
+
+					Misc.townCheck();
+				}
+			} else {
+				if (fail > 0 && !useTeleport && !me.inTown) {
+					// Don't go berserk on longer paths
+					if (!cleared) {
+						Attack.clear(5);
+
+						cleared = true;
+					}
+
+					if (fail > 1 && me.getSkill(143, 1)) {
+						Skill.cast(143, 0, node.x, node.y);
+					}
+				}
+
+				// Reduce node distance in new path
+				path = getPath(me.area, x, y, me.x, me.y, useTeleport ? 1 : 0, useTeleport ? rand(25, 35) : rand(10, 15));
+				fail += 1;
+
+				if (!path) {
+					throw new Error("moveTo: Failed to generate path.");
+				}
+
+				path.reverse();
+				PathDebug.drawPath(path);
+
+				if (pop) {
+					path.pop();
+				}
+
+				print("move retry " + fail);
+
+				if (fail > 0) {
+					Packet.flash(me.gid);
+
+					if (fail >= retry) {
+						break;
+					}
+				}
+			}
+		}
+
+		delay(5);
+	}
+
+	if (useTeleport && Config.TeleSwitch) {
+		Attack.weaponSwitch(Attack.getPrimarySlot());
+	}
+
+	if (me.getSkill(2) !== preSkill) {
+		Skill.setSkill(preSkill, 0);
+	}
+
+	PathDebug.removeHooks();
+
+	return getDistance(me, node.x, node.y) < 5;
+}

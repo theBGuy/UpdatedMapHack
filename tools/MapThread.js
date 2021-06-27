@@ -190,32 +190,32 @@ var Hooks = {
 
 				switch (item.classid) {
 				//Uniques
+				//----Charms/Jewels----//
 				case 603:
-					code += item.quality === 5 ? "" : "Annihilus";
+					code += "Annihilus";
 					break;
 				case 604:
-					code += item.quality === 5 ? "" : "Hellfire Torch";
+					code += "Hellfire Torch";
 					break;
 				case 605:
-					code += item.quality === 5 ? "" : "Gheed's";
+					code += "Gheed's";
 					break;
 				case 643:
-					code += item.quality === 5 ? "" : "Facet";
+					code += "Facet";
 					break;
 				case 522: 	// Amulet's
 				case 520: 	// Ring's
 					code += item.name + "(" + item.ilvl + ")";
 					
 					break;
-				case 432:
-					code += item.quality === 5 ? "" : "Gladiator's Bane";
-					break;
+				//--------Sorc--------//
 				case 300:
 					code += item.quality === 5 ? "" : "Death's Fathom";
 					break;
 				case 297:
 					code += item.quality === 5 ? "" : "Eschuta's";
 					break;
+				//--------Barb--------//
 				case 477:
 					code += item.quality === 5 ? "" : "Arreat's Face";
 					break;
@@ -228,6 +228,7 @@ var Hooks = {
 				case 494:
 					code += item.quality === 5 ? "" : "Wolfhowl";
 					break;
+				//--------Druid--------//
 				case 472:
 					code += item.quality === 5 ? "" : "Jalal's";
 					break;
@@ -237,6 +238,7 @@ var Hooks = {
 				case 490:
 					code += item.quality === 5 ? "" : "Spirit Keeper";
 					break;
+				//--------Paladin--------//
 				case 481:
 					code += item.quality === 5 ? "" : "HoZ";
 					break;
@@ -246,6 +248,7 @@ var Hooks = {
 				case 501:
 					code += item.quality === 5 ? "" : "Dragonscale";
 					break;
+				//--------Amazon--------//
 				case 292:
 					code += item.quality === 5 ? "" : "Lycander's Aim";
 					break;
@@ -264,6 +267,7 @@ var Hooks = {
 				case 303:
 					code += item.quality === 5 ? "" : "Stoneraven";
 					break;
+				//--------Assassin--------//
 				case 187:
 					code += item.quality === 5 ? "" : "Bartuc's";
 					break;
@@ -276,6 +280,7 @@ var Hooks = {
 				case 192:
 					code += item.quality === 5 ? "" : "Shadow Killer";
 					break;
+				//--------Necromancer--------//
 				case 487:
 					code += item.quality === 5 ? "" : "Homunculus";
 					break;
@@ -285,6 +290,22 @@ var Hooks = {
 				case 507:
 					code += item.quality === 5 ? "" : "Darkforce";
 					break;
+				case 209:
+					code += item.quality === 5 ? "" : "Death's Web";
+					break;
+				case 208:
+					code += item.quality === 5 ? "" : "Boneshade";
+					break;
+				case 105:
+					code += item.quality === 5 ? "" : "King Leoric";
+					break;
+				case 104:
+					code += item.quality === 5 ? "" : "Carin Shard";
+					break;
+				case 103:
+					code += item.quality === 5 ? "" : "Suicide Branch";
+					break;
+				//--------Helms--------//
 				case 417:
 					code += item.quality === 5 ? "" : "Andariel's";
 					break;
@@ -303,6 +324,10 @@ var Hooks = {
 				case 352:
 					code += item.quality === 5 ? "" : "Peasant Crown";
 					break;
+				case 420:
+					code += item.quality === 5 ? "" : "Kira's";
+					break;
+				//--------Polearms--------//
 				case 258:
 					code += item.quality === 5 ? "" : "Stormspire";
 					break;
@@ -312,9 +337,20 @@ var Hooks = {
 				case 255:
 					code += item.quality === 5 ? "" : "Reaper's Toll";
 					break;
+				//--------Axes--------//
 				case 198:
 					code += item.quality === 5 ? "" : "Rune Master";
 					break;
+				case 240:
+					code += item.quality === 5 ? "" : "Gimmershred";
+					break;
+				case 241:
+					code += item.quality === 5 ? "" : "Warshrike";
+					break;
+				case 242:
+					code += item.quality === 5 ? "" : "Lacerator";
+					break;
+				//--------Bows--------//
 				case 271:
 					code += item.quality === 5 ? "" : "Windforce";
 					break;
@@ -324,12 +360,14 @@ var Hooks = {
 				case 269:
 					code += item.quality === 5 ? "" : "Eaglehorn";
 					break;
+				//--------Staffs--------//
 				case 263:
 					code += item.quality === 5 ? "" : "Mang Song's";
 					break;
-				case 420:
-					code += item.quality === 5 ? "" : "Kira's";
+				case 157:
+					code += item.quality === 5 ? "" : "Ribcracker";
 					break;
+				//--------Boots--------//
 				case 457:
 					code += item.quality === 5 ? "" : "Marrowwalk";
 					break;
@@ -344,6 +382,10 @@ var Hooks = {
 					break;
 				case 342:
 					code += item.quality === 5 ? "" : "Goblin Toe";
+					break;
+				//--------Armor--------//
+				case 432:
+					code += item.quality === 5 ? "" : "Gladiator's Bane";
 					break;
 				case 373:
 					code += item.quality === 5 ? "" : "Que-Hegan's";
@@ -363,10 +405,8 @@ var Hooks = {
 				case 359:
 					code += item.quality === 5 ? "" : "Spirit Shroud";
 					break;
-				case 157:
-					code += item.quality === 5 ? "" : "Ribcracker";
-					break;
 				//Set Items/Uniques
+				//--------Set Tal Rasha--------//
 				case 290:
 					code += item.quality === 5 ? "Tal Orb" : "Occulus";
 					break;
@@ -379,6 +419,7 @@ var Hooks = {
 				case 392:
 					code += item.quality === 5 ? "Tal Belt" : "Gloom's Trap";
 					break;
+				//--------Set Trang Ouls--------//
 				case 465:
 					code += item.quality === 5 ? "Trang Helm" : "Giant Skull";
 					break;
@@ -394,6 +435,7 @@ var Hooks = {
 				case 486:
 					code += item.quality === 5 ? "Trang Shield" : "";
 					break;
+				//--------Set Immortal Kings--------//
 				case 219:
 					code += item.quality === 5 ? "IK Maul" : "Windhammer";
 					break;
@@ -409,6 +451,7 @@ var Hooks = {
 				case 389:
 					code += item.quality === 5 ? "IK Boots" : "Gore Rider";
 					break;
+				//--------Set Aldurs--------//
 				case 113:
 					code += item.quality === 5 ? "Aldur's Wep" : "Moonfall";
 					break;
@@ -421,6 +464,7 @@ var Hooks = {
 				case 113:
 					code += item.quality === 5 ? "Aldur's Boots" : "War Trav's";
 					break;
+				//--------Set Griswold's--------//
 				case 213:
 					code += item.quality === 5 ? "Griswold's Wep" : "Moonfall";
 					break;
@@ -433,6 +477,7 @@ var Hooks = {
 				case 502:
 					code += item.quality === 5 ? "Griswold's Shield" : "";
 					break;
+				//--------Set Disciples--------//
 				case 429:
 					code += item.quality === 5 ? "Disciple's Armor" : "Ormus Robe's";
 					break;
@@ -445,6 +490,7 @@ var Hooks = {
 				case 385:
 					code += item.quality === 5 ? "Disciple's Boots" : "Infernostride";
 					break;
+				//--------Set Naj's--------//
 				case 418:
 					code += item.quality === 5 ? "Naj's Helm" : "";
 					break;
@@ -457,6 +503,7 @@ var Hooks = {
 				case 418:
 					code += item.quality === 5 ? "Naj's Helm" : "Moonfall";
 					break;
+				//--------Set Mavina's--------//
 				case 418:
 					code += item.quality === 5 ? "Mavina's Bow" : "";
 					break;
@@ -472,6 +519,7 @@ var Hooks = {
 				case 383:
 					code += item.quality === 5 ? "Mavina's Gloves" : "Lava Gout";
 					break;
+				//--------Set Orphan's Call--------//
 				case 329:
 					code += item.quality === 5 ? item.name : "Umbral Disk";
 					break;
@@ -484,6 +532,7 @@ var Hooks = {
 				case 335:
 					code += item.quality === 5 ? "Orphan's Gloves" : "Bloodfist";
 					break;
+				//--------Set Natalya's--------//
 				case 181:
 					code += item.quality === 5 ? "Natalya's Wep" : "";
 					break;
@@ -496,6 +545,7 @@ var Hooks = {
 				case 387:
 					code += item.quality === 5 ? "Natalya's Boots" : "Silkweave";
 					break;
+				//--------Set Sazabi's--------//
 				case 227:
 					code += item.quality === 5 ? "Sazabi's Wep" : "Frostwind";
 					break;
