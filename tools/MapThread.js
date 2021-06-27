@@ -1433,7 +1433,7 @@ var Hooks = {
 			case "credits":
 				this.hooks.push({
 					name: "credits",
-					hook: new Text("MH by theBGuy", 0 + Hooks.lowerLeftResfixX, 600 + Hooks.resfixY, 4, 0, 0)
+					hook: new Text("MH by theBGuy", 0, 600 + Hooks.resfixY, 4, 0, 0)
 				});
 
 				break;
