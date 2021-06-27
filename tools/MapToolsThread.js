@@ -443,7 +443,10 @@ function main() {
 			
 			break;
 		case 106: // numpad * - precast
+			let preSkill = me.getSkill(2);
+
 			Precast.doPrecast(true);
+			Skill.setSkill(preSkill, 0);
 
 			break;
 		}

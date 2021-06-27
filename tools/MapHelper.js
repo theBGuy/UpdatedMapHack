@@ -214,7 +214,7 @@ function main() {
 							Misc.openChest(chest);
 						}
 
-						if ([4, 39, 54, 109, 111, 112, 117, 133, 134, 135, 136].indexOf(me.area) > -1) {
+						if ([4, 54, 109, 111, 112, 117, 133, 134, 135, 136].indexOf(me.area) > -1) {
 							Pather.usePortal();
 						}
 
