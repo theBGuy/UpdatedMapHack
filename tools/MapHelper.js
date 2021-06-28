@@ -414,10 +414,25 @@ function main() {
 	}
 }
 
+Pather.stop = false;
+
+Pather.stopEvent = function (key) {
+	switch (key) {
+	case 105: // Numpad 9
+		if (!me.idle) {
+			Pather.stop = true;	
+		}
+		
+		break;
+	}
+};
+
 Pather.moveTo = function (x, y, retry, clearPath, pop) {
 	if (me.dead) { // Abort if dead
 		return false;
 	}
+
+	addEventListener("keyup", Pather.stopEvent);
 
 	var i, path, adjustedNode, cleared, useTeleport,
 		node = {x: x, y: y},
@@ -457,20 +472,6 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 
 	let preSkill = me.getSkill(2);
 
-	/* Disabling getPath optimizations, they are causing desync -- noah
-	// Teleport without calling getPath if the spot is close enough
-	if (useTeleport && getDistance(me, x, y) <= this.teleDistance) {
-		//Misc.townCheck();
-
-		return this.teleportTo(x, y);
-	}
-
-	// Walk without calling getPath if the spot is close enough
-	if (!useTeleport && (getDistance(me, x, y) <= 5 || (getDistance(me, x, y) <= 25 && !CollMap.checkColl(me, {x: x, y: y}, 0x1)))) {
-		return this.walkTo(x, y);
-	}
-	*/
-
 	path = getPath(me.area, x, y, me.x, me.y, useTeleport ? 1 : 0, useTeleport ? ([62, 63, 64].indexOf(me.area) > -1 ? 30 : this.teleDistance) : this.walkDistance);
 
 	if (!path) {
@@ -490,7 +491,8 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 	}
 
 	while (path.length > 0) {
-		if (me.dead) { // Abort if dead
+		if (me.dead || Pather.stop) { // Abort if dead
+			Pather.stop = false;	// Reset value
 			return false;
 		}
 
@@ -585,6 +587,8 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 	}
 
 	PathDebug.removeHooks();
+
+	removeEventListener("keyup", Pather.stopEvent);
 
 	return getDistance(me, node.x, node.y) < 5;
 }

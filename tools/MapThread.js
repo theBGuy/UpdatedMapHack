@@ -15,7 +15,7 @@ var Hooks = {
 	statBoxBX: 645,
 	statBoxBY: 520,
 	qolBoxX: 715,
-	qolBoxY: 460,
+	qolBoxY: 450,
 	statBoxAResFixX: me.screensize ? 0 : -106,
 	statBoxAResFixY: me.screensize ? 0 : -445,
 	statBoxBResFixX: me.screensize ? 0 : -600,
@@ -1216,6 +1216,10 @@ var Hooks = {
 				this.add("townQolsB");
 			}
 
+			if (!this.getHook("killPather")) {
+				this.add("killPather");
+			}
+
 			if (!this.getHook("statBoxA")) {
 				this.add("statBoxA");
 			}
@@ -1440,42 +1444,49 @@ var Hooks = {
 			case "qolBox":
 				this.hooks.push({
 					name: "qolBox",
-					hook: new Box(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 135, 30, 0x0, 1, 2)
+					hook: new Box(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 135, 40, 0x0, 1, 2)
 				});
 
 				break;
 			case "qolFrame":
 				this.hooks.push({
 					name: "qolFrame",
-					hook: new Frame(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 135, 30, 2)
+					hook: new Frame(Hooks.qolBoxX + Hooks.qolBoxResFixX, Hooks.qolBoxY + Hooks.qolBoxResFixY, 135, 40, 2)
 				});
 
 				break;
 			case "nonTownQolsA":
 				this.hooks.push({
 					name: "nonTownQolsA",
-					hook: new Text("Key 5: Make Portal", 656 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 5: Make Portal", 656 + Hooks.qolBoxResFixX, 465 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
 			case "nonTownQolsB":
 				this.hooks.push({
 					name: "nonTownQolsB",
-					hook: new Text("Key 6: Go To Town", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 6: Go To Town", 656 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
 			case "townQolsA":
 				this.hooks.push({
 					name: "townQolsA",
-					hook: new Text("Key 5: Go To Healer", 656 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 5: Go To Healer", 656 + Hooks.qolBoxResFixX, 465 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
 			case "townQolsB":
 				this.hooks.push({
 					name: "townQolsB",
-					hook: new Text("Key 6: Open Stash", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 6: Open Stash", 656 + Hooks.qolBoxResFixX, 475 + Hooks.qolBoxResFixY, 4)
+				});
+
+				break;
+			case "killPather":
+				this.hooks.push({
+					name: "killPather",
+					hook: new Text("Num 9: Force Stop", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
