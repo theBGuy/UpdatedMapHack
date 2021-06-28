@@ -2,7 +2,7 @@
 *	@filename	MapThread.js
 *	@author		theBGuy
 *	@desc		MapThread used with D2BotMap.dbj
-*	@credits 	kolton for orginal MapThread, isidOre for the box/frame style
+*	@credits 	kolton for orginal MapThread, isid0re for the box/frame style
 */
 
 var Hooks = {
@@ -2737,6 +2737,11 @@ function main() {
 			if (me.inTown) {
 				qolObj.type = "qol";
 				qolObj.action = "heal";
+
+				if (getUIFlag(0x19) || getUIFlag(0x17)) {
+					break;
+				}
+
 				scriptBroadcast(JSON.stringify(qolObj));
 			}
 
@@ -2756,6 +2761,11 @@ function main() {
 			if (me.inTown) {
 				qolObj.type = "qol";
 				qolObj.action = "openStash";
+
+				if (getUIFlag(0x19) || getUIFlag(0x17)) {
+					break;
+				}
+
 				scriptBroadcast(JSON.stringify(qolObj));
 			}
 
@@ -2794,7 +2804,7 @@ function main() {
 	};
 
 	var i,
-		hideFlags = [0x09, 0x0C, 0x0D, 0x01, 0x02, 0x0F, 0x18, 0x19, 0x1A, 0x21, 0x05, 0x14, 0x24];
+		hideFlags = [0x09, 0x0C, 0x0D, 0x01, 0x02, 0x0F, 0x17, 0x18, 0x19, 0x1A, 0x21, 0x05, 0x14, 0x24];
 
 	let itemInfo, info = new UnitInfo();
 
