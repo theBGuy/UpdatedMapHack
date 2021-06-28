@@ -1486,7 +1486,7 @@ var Hooks = {
 			case "killPather":
 				this.hooks.push({
 					name: "killPather",
-					hook: new Text("Num 9: Force Stop", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Num 9: ÿc1Force Stop", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
