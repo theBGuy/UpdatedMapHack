@@ -23,7 +23,7 @@ var Hooks = {
 	statBoxBTextResFixX: me.screensize ? 0 : -5,
 	statBoxBWidthResFixX: me.screensize ? 0 : 10,
 	qolBoxResFixX: me.screensize ? 0 : -645,
-	qolBoxResFixY: me.screensize ? 0 : -320,
+	qolBoxResFixY: me.screensize ? 0 : -310,
 	resfixX: me.screensize ? 0 : -85,
 	resfixY: me.screensize ? 0 : -120,
 	upperRightResfixX: me.screensize ? 0 : -160,
@@ -1486,7 +1486,7 @@ var Hooks = {
 			case "killPather":
 				this.hooks.push({
 					name: "killPather",
-					hook: new Text("Num 9: ÿc1Force Stop", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Num 9: ÿc1Stop Action", 656 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
