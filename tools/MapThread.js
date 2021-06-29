@@ -309,9 +309,6 @@ var Hooks = {
 				case 417:
 					code += item.quality === 5 ? "" : "Andariel's";
 					break;
-				case 426:
-					code += item.quality === 5 ? "" : "Nightwing's";
-					break;
 				case 507:
 					code += item.quality === 5 ? "" : "Darkforce";
 					break;
@@ -396,9 +393,6 @@ var Hooks = {
 				case 365:
 					code += item.quality === 5 ? "" : "Shaftstop";
 					break;
-				case 366:
-					code += item.quality === 5 ? "" : "Duriel's Shell";
-					break;
 				case 360:
 					code += item.quality === 5 ? "" : "Vipermagi's";
 					break;
@@ -443,7 +437,7 @@ var Hooks = {
 					code += item.quality === 5 ? "IK Helm" : "";
 					break;
 				case 442:
-					code += item.quality === 5 ? "IK Armor" : item.ilvl === 87 ? "Tyrael's Might" : "Templar's Might";
+					code += item.quality === 5 ? "IK Armor" : item.name;
 					break;
 				case 384:
 					code += item.quality === 5 ? "IK Gloves" : "HellMouth";
@@ -552,8 +546,18 @@ var Hooks = {
 				case 437:
 					code += item.quality === 5 ? "Sazabi's Armor" : "Arkaine's";
 					break;
+				//--------Set Heavens's--------//
 				case 19:
 					code += item.quality === 5 ? "Heavens's Wep" : "Crushflange";
+					break;
+				case 426:
+					code += item.quality === 5 ? "Heavens's Helm" : "Nightwing's";
+					break;
+				case 366:
+					code += item.quality === 5 ? "Heavens's Armor" : "Duriel's Shell";
+					break;
+				case 449:
+					code += item.quality === 5 ? "Heavens's Shield" : item.name;
 					break;
 				case 320:
 					code += item.quality === 5 ? item.name : "Venom Ward";
@@ -561,15 +565,34 @@ var Hooks = {
 				case 333:
 					code += item.quality === 5 ? item.name : "The Ward";
 					break;
-				case 310:
-					code += item.quality === 5 ? "Heavens's Helm" : "Howltusk";
+				//--------Set Bul-Kathos's--------//
+				case 234:
+					code += item.quality === 5 ? "Bul-Kathos' Blade" : "Grandfather";
 					break;
+				case 228:
+					code += item.quality === 5 ? "Bul-Kathos' Sword" : "";
+					break;
+				//--------Set Hwanin's--------//
+				case 151:
+					code += item.quality === 5 ? "Hwanin's Bill" : "Blackleach";
+					break;
+				case 364:
+					code += item.quality === 5 ? "Hwanin's Armor" : "Crow Caw";
+					break;
+				case 357:
+					code += item.quality === 5 ? "Hwanin's Helm" : "Crown of Thieves";
+					break;
+				case 346:
+					code += item.quality === 5 ? item.name : "Nightsmoke";
+					break;
+				//--------Set Angelics's--------//
 				case 317:
 					code += item.quality === 5 ? "Angelic's Armor" : "Darkglow";
 					break;
 				case 27:
 					code += item.quality === 5 ? "Angelic's Wep" : "Krintiz";
 					break;
+				//--------Set Arcanna's--------//
 				case 307:
 					code += item.quality === 5 ? "Arcanna's Helm" : "Tarnhelm";
 					break;
@@ -579,6 +602,7 @@ var Hooks = {
 				case 67:
 					code += item.quality === 5 ? "Arcanna's Staff" : "Iron Jang Bong";
 					break;
+				//--------Set Artics's--------//
 				case 337:
 					code += item.quality === 5 ? "Artic's Gloves" : "Magefist";
 					break;
@@ -591,6 +615,7 @@ var Hooks = {
 				case 74:
 					code += item.quality === 5 ? "Artic's Bow" : "Hellclap";
 					break;
+				//--------Set Berserker's--------//
 				case 2:
 					code += item.quality === 5 ? "Beserker's Wep" : "Bladebone";
 					break;
@@ -599,24 +624,6 @@ var Hooks = {
 					break;
 				case 308:
 					code += item.quality === 5 ? "Beserker's Helm" : "Coif of Glory";
-					break;
-				case 234:
-					code += item.quality === 5 ? "Bul-Kathos' Blade" : "Grandfather";
-					break;
-				case 228:
-					code += item.quality === 5 ? "Bul-Kathos' Sword" : "";
-					break;
-				case 151:
-					code += item.quality === 5 ? "Hwanin's Bill" : "Blackleach";
-					break;
-				case 364:
-					code += item.quality === 5 ? "Hwanin's Armor" : "Crow Caw";
-					break;
-				case 357:
-					code += item.quality === 5 ? "Hwanin's Helm" : "Crown of Thieves";
-					break;
-				case 346:
-					code += item.quality === 5 ? item.name : "Nightsmoke";
 					break;
 				default:
 					code += item.name;
