@@ -2042,9 +2042,9 @@ var Hooks = {
 				case 97: // Numpad 1
 					hook = this.getHook("Previous Area");
 
-					if ([133, 134, 135, 136].indexOf(me.area) > -1) {
+					if ([133, 135, 136].indexOf(me.area) > -1) {
 						obj.type = "unit";
-					} else if ([38, 39, 125, 126, 127].indexOf(me.area) > -1) {
+					} else if ([38, 39, 125, 126, 127, 134].indexOf(me.area) > -1) {
 						obj.type = "portal";
 					} else {
 						obj.type = "area";
@@ -2607,6 +2607,16 @@ var Hooks = {
 					});
 
 					break;
+				// Forgotten sands
+				case 134:
+					this.hooks.push({
+						name: "Previous Area",
+						destination: 109,
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(109), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				// Matron's
 				case 133:
 					if (me.area === 133) {
 						let lilith = getPresetUnit(me.area, 2, 397);
@@ -2615,22 +2625,29 @@ var Hooks = {
 							case 11:
 								entrance = {x: 20023, y: 7643};
 								break;
+							case 20:
+								entrance = {x: 20303, y: 7803};
+								break;
+							case 21:
+								entrance = {x: 20263, y: 7683};
+								break;
 						}
 					}
-				case 134:
-					if (me.area === 134) {
-						entrance = {x: 20193, y: 8693};
-					}
+				// Furnace
 				case 135:
 					if (me.area === 135) {
 						let izual = getPresetUnit(me.area, 2, 397);
 
 						switch (izual.x) {
+							case 14:
+								entrance = {x: 20138, y: 14873};
+								break;
 							case 15:
 								entrance = {x: 20138, y: 14563};
 								break;
 						}
 					}
+				// Tristram
 				case 136:
 					if (me.area === 136) {
 						entrance = {x: 25105, y: 5140};
