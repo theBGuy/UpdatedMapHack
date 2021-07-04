@@ -2511,7 +2511,7 @@ var Hooks = {
 					this.portals.push({
 						name: "Uber Tristam",
 						destination: 136,
-						hook: new Text("ÿc1Num 8: " + Pather.getAreaNam(136), Hooks.portalX, Hooks.portalY + Hooks.resfixY + 45)
+						hook: new Text("ÿc1Num 8: " + Pather.getAreaName(136), Hooks.portalX, Hooks.portalY + Hooks.resfixY + 45)
 					});
 				}
 
