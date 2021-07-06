@@ -1499,7 +1499,7 @@ var Hooks = {
 			case "nonTownQolsA":
 				this.hooks.push({
 					name: "nonTownQolsA",
-					hook: new Text("Key 5: Make Portal", 653 + Hooks.qolBoxResFixX, 465 + Hooks.qolBoxResFixY, 4)
+					hook: new Text("Key 5: Make Portal", 653 + Hooks.qolBoxResFixX, 455 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
