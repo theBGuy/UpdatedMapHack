@@ -1534,7 +1534,7 @@ var Hooks = {
 			case "pickitEnabled":
 				this.hooks.push({
 					name: "pickitEnabled",
-					hook: new Text("Num -: ÿc1Default Filter", 653 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
+					hook: new Text((Hooks.pickitEnabled ? "Num -: ÿc<Your Filter" : "Num -: ÿc1Default Filter"), 653 + Hooks.qolBoxResFixX, 485 + Hooks.qolBoxResFixY, 4)
 				});
 
 				break;
@@ -2922,6 +2922,7 @@ function main() {
 				Hooks.text.getHook("pickitEnabled").hook.text = "Num -: ÿc1Default Filter";
 			} else {
 				Hooks.pickitEnabled = true;
+				Hooks.items.flush();
 				Hooks.text.getHook("pickitEnabled").hook.text = "Num -: ÿc<Your Filter";
 
 				if (!Hooks.saidMessage) {
