@@ -117,6 +117,13 @@ function main() {
 									me.cancel();
 								}
 							}
+
+							let prevPortal = getUnit(2, 298);
+
+							if (prevPortal) {
+								Pather.useUnit(2, 298, 54);
+								break;
+							}
 						}
 
 						switch (me.area) {

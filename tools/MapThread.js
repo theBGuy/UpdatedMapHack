@@ -2044,7 +2044,7 @@ var Hooks = {
 				case 97: // Numpad 1
 					hook = this.getHook("Previous Area");
 
-					if ([133, 135, 136].indexOf(me.area) > -1) {
+					if ([74, 133, 135, 136].indexOf(me.area) > -1) {
 						obj.type = "unit";
 					} else if ([38, 39, 125, 126, 127, 134].indexOf(me.area) > -1) {
 						obj.type = "portal";
@@ -2575,7 +2575,7 @@ var Hooks = {
 				}
 			}
 
-			if ([38, 39, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+			if ([38, 39, 74, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
 				let chest, entrance = {x: 0, y: 0};
 
 				switch (me.area) {
@@ -2592,6 +2592,14 @@ var Hooks = {
 						name: "Previous Area",
 						destination: 1,
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(1), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 74: 	// Arcane Sanctuary
+					this.hooks.push({
+						name: "Previous Area",
+						destination: {x: 25427, y: 5427},
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(54), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
 					break;
