@@ -64,6 +64,8 @@ function main() {
 					case "area":
 						if (obj.dest === 120) {
 							Pather.moveToExit(obj.dest, false);	
+						} else if (obj.dest === 46) {
+							Pather.journeyTo(46);
 						} else {
 							Pather.moveToExit(obj.dest, true);
 						}
@@ -277,6 +279,15 @@ function main() {
 							break;
 						case 39:
 							redPortal = Pather.getPortal(39);
+
+							if (redPortal) {
+								Pather.moveToUnit(redPortal);
+								Pather.usePortal(null, null, redPortal);
+							}
+
+							break;
+						case 74:
+							redPortal = Pather.getPortal(74);
 
 							if (redPortal) {
 								Pather.moveToUnit(redPortal);

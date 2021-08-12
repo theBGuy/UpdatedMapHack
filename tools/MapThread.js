@@ -1115,7 +1115,6 @@ var Hooks = {
 			case 71:
 			case 72:
 			case 73:
-			case 74:
 			case 84:
 			case 85:
 			case 86:
@@ -1185,6 +1184,7 @@ var Hooks = {
 			case 42:
 			case 43:
 			case 44:
+			case 74:
 			case 83:
 			case 107:
 			case 111:
@@ -2046,7 +2046,7 @@ var Hooks = {
 
 					if ([74, 133, 135, 136].indexOf(me.area) > -1) {
 						obj.type = "unit";
-					} else if ([38, 39, 125, 126, 127, 134].indexOf(me.area) > -1) {
+					} else if ([38, 39, 46, 125, 126, 127, 134].indexOf(me.area) > -1) {
 						obj.type = "portal";
 					} else {
 						obj.type = "area";
@@ -2529,53 +2529,7 @@ var Hooks = {
 
 			}
 
-			exits = getArea(area).exits;
-
-			if (exits) {
-				for (i = 0; i < exits.length; i += 1) {
-					if (exits[i].target === this.prevAreas[me.area]) {
-						this.hooks.push({
-							name: "Previous Area",
-							destination: this.prevAreas[me.area],
-							hook: new Text("ÿc1Num 1: " + Pather.getAreaName(this.prevAreas[me.area]), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
-						});
-
-						break;
-					}
-				}
-
-				// Check nextAreas first
-				for (i = 0; i < exits.length; i += 1) {
-					if (exits[i].target === nextAreas[me.area]) {
-						this.hooks.push({
-							name: "Next Area",
-							destination: nextAreas[me.area],
-							hook: new Text("ÿc3Num 0: " + Pather.getAreaName(nextAreas[me.area]), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
-						});
-
-						nextCheck = true;
-
-						break;
-					}
-				}
-
-				// In case the area isn't in nextAreas array, use this.prevAreas array
-				if (!nextCheck) {
-					for (i = 0; i < exits.length; i += 1) {
-						if (exits[i].target === this.prevAreas.indexOf(me.area)) {
-							this.hooks.push({
-								name: "Next Area",
-								destination: this.prevAreas.indexOf(me.area),
-								hook: new Text("Num 0: " + Pather.getAreaName(this.prevAreas.indexOf(me.area)), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
-							});
-
-							break;
-						}
-					}
-				}
-			}
-
-			if ([38, 39, 74, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
+			if ([38, 39, 46, 74, 125, 126, 127, 133, 134, 135, 136].indexOf(me.area) > -1) {
 				let chest, entrance = {x: 0, y: 0};
 
 				switch (me.area) {
@@ -2595,11 +2549,25 @@ var Hooks = {
 					});
 
 					break;
+				case 46: 	// Canyon of Magic
+					this.hooks.push({
+						name: "Previous Area",
+						destination: 74,
+						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(74), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
 				case 74: 	// Arcane Sanctuary
 					this.hooks.push({
 						name: "Previous Area",
 						destination: {x: 25427, y: 5427},
 						hook: new Text("ÿc1Num 1: " + Pather.getAreaName(54), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					this.hooks.push({
+						name: "Next Area",
+						destination: 46,
+						hook: new Text("Num 0: " + Pather.getAreaName(46), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 					});
 
 					break;
@@ -2682,6 +2650,52 @@ var Hooks = {
 					break;
 				}
 
+			}
+
+			exits = getArea(area).exits;
+
+			if (exits) {
+				for (i = 0; i < exits.length; i += 1) {
+					if (exits[i].target === this.prevAreas[me.area]) {
+						this.hooks.push({
+							name: "Previous Area",
+							destination: this.prevAreas[me.area],
+							hook: new Text("ÿc1Num 1: " + Pather.getAreaName(this.prevAreas[me.area]), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+						});
+
+						break;
+					}
+				}
+
+				// Check nextAreas first
+				for (i = 0; i < exits.length; i += 1) {
+					if (exits[i].target === nextAreas[me.area]) {
+						this.hooks.push({
+							name: "Next Area",
+							destination: nextAreas[me.area],
+							hook: new Text("ÿc3Num 0: " + Pather.getAreaName(nextAreas[me.area]), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+						});
+
+						nextCheck = true;
+
+						break;
+					}
+				}
+
+				// In case the area isn't in nextAreas array, use this.prevAreas array
+				if (!nextCheck) {
+					for (i = 0; i < exits.length; i += 1) {
+						if (exits[i].target === this.prevAreas.indexOf(me.area)) {
+							this.hooks.push({
+								name: "Next Area",
+								destination: this.prevAreas.indexOf(me.area),
+								hook: new Text("Num 0: " + Pather.getAreaName(this.prevAreas.indexOf(me.area)), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+							});
+
+							break;
+						}
+					}
+				}
 			}
 
 			let worldStonePortal = me.area === 131;
