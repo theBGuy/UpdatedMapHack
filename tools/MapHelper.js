@@ -66,6 +66,14 @@ function main() {
 							Pather.moveToExit(obj.dest, false);	
 						} else if (obj.dest === 46) {
 							Pather.journeyTo(46);
+						} else if (obj.dest === 73) {
+							Pather.moveToPreset(me.area, 2, 152, -11, 3);
+
+							for (let i = 0; i < 3; i++) {
+								if (Pather.useUnit(2, 100, 73)) {
+									break;
+								}
+							}
 						} else {
 							Pather.moveToExit(obj.dest, true);
 						}
@@ -104,6 +112,7 @@ function main() {
 							}
 
 							Pather.teleport = teleport;
+
 							break;
 						}
 
@@ -140,14 +149,6 @@ function main() {
 						case 40: 	// Lut Gholein -> Sewers Level  1
 							Pather.useUnit(5, 20, 47);
 
-							break;
-						case getRoom().correcttomb:
-							for (let i = 0; i < 3; i++) {
-								if (Pather.useUnit(2, 100, 73)) {
-									break;
-								}
-							}
-							
 							break;
 						case 80: 	// Kurast Bazaar -> A3 Sewers Level 1
 							Pather.useUnit(5, 57, 92);

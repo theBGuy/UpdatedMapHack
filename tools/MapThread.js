@@ -2698,6 +2698,14 @@ var Hooks = {
 				}
 			}
 
+			if (me.area === getRoom().correcttomb) {
+				this.hooks.push({
+					name: "Next Area",
+					destination: 73,
+					hook: new Text("Num 0: " + Pather.getAreaName(73), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
+			}
+
 			let worldStonePortal = me.area === 131;
 
 			if (worldStonePortal) {
