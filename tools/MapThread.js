@@ -303,9 +303,6 @@ var Hooks = {
 				case 506:
 					code += item.quality === 5 ? "" : "Boneflame";
 					break;
-				case 507:
-					code += item.quality === 5 ? "" : "Darkforce";
-					break;
 				case 209:
 					code += item.quality === 5 ? "" : "Death's Web";
 					break;
@@ -427,7 +424,7 @@ var Hooks = {
 				case 441:
 					code += item.quality === 5 ? "Aldur's Armor" : "Steel Carapace";
 					break;
-				case 113:
+				case 388:
 					code += item.quality === 5 ? "Aldur's Boots" : "War Trav's";
 					break;
 				//--------Set Griswold's--------//
@@ -492,7 +489,7 @@ var Hooks = {
 				case 290:
 					code += item.quality === 5 ? "Tal Orb" : "Occulus";
 					break;
-				case 490:
+				case 440:
 					code += item.quality === 5 ? "Tal Armor" : item.name;
 					break;
 				case 358:
