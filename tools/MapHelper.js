@@ -74,6 +74,14 @@ function main() {
 									break;
 								}
 							}
+						} else if (obj.dest === 103) {
+							Pather.moveTo(17581, 8070);
+							
+							for (let i = 0; i < 3; i++) {
+								if (Pather.useUnit(2, 342, 103)) {
+									break;
+								}
+							}
 						} else {
 							Pather.moveToExit(obj.dest, true);
 						}
@@ -224,7 +232,7 @@ function main() {
 							Misc.openChest(chest);
 						}
 
-						if ([4, 54, 109, 111, 112, 117, 133, 135, 136].indexOf(me.area) > -1) {
+						if ([4, 54, 109, 111, 112, 117, 121, 133, 135, 136].indexOf(me.area) > -1) {
 							Pather.usePortal();
 						}
 
@@ -425,12 +433,80 @@ function main() {
 
 						break;
 					case "qol":
+						let unit;
 						switch (obj.action) {
 						case "heal":
 							Town.initNPC("Heal", "heal");
+
 							break;
 						case "openStash":
 							Town.openStash();
+
+							break;
+						case "stashItems":
+							Town.stash(true, true);
+
+							break;
+						case "moveItemFromInvoToStash":
+						case "moveItemFromStashToInvo":
+							unit = getUnit(101);
+
+							switch (unit.location) {
+							case 3:
+								if (Storage.Stash.CanFit(unit)) {
+									Storage.Stash.MoveTo(unit);
+								}
+
+								break;
+							case 7:
+								if (Storage.Inventory.CanFit(unit)) {
+									Storage.Inventory.MoveTo(unit);
+								}
+
+								break;
+							}
+
+							break;
+						case "moveItemFromInvoToCube":
+						case "moveItemFromCubeToInvo":
+							unit = getUnit(101);
+
+							switch (unit.location) {
+							case 3:
+								if (Storage.Cube.CanFit(unit)) {
+									Storage.Cube.MoveTo(unit);
+								}
+
+								break;
+							case 6:
+								if (Storage.Inventory.CanFit(unit)) {
+									Storage.Inventory.MoveTo(unit);
+								}
+
+								break;
+							}
+
+							break;
+						case "moveItemFromInvoToTrade":
+						case "moveItemFromTradeToInvo":
+							unit = getUnit(101);
+
+							switch (unit.location) {
+							case 3:
+								if (Storage.TradeScreen.CanFit(unit)) {
+									Storage.TradeScreen.MoveTo(unit);
+								}
+
+								break;
+							case 5:
+								if (Storage.Inventory.CanFit(unit)) {
+									Packet.itemToCursor(unit);
+									Storage.Inventory.MoveTo(unit);
+								}
+
+								break;
+							}
+
 							break;
 						}
 
@@ -626,3 +702,56 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 
 	return getDistance(me, node.x, node.y) < 5;
 }
+
+Town.stash = function (stashGold, force) {
+	if (stashGold === undefined) {
+		stashGold = true;
+	}
+
+	if (force === undefined) {
+		force = false;
+	}
+
+	if (!this.needStash() && !force) {
+		return true;
+	}
+
+	me.cancel();
+
+	var i, result, tier, bodyLoc,
+		items = Storage.Inventory.Compare(Config.Inventory);
+
+	if (items) {
+		for (i = 0; i < items.length; i += 1) {
+			if (this.canStash(items[i])) {
+				result = (Pickit.checkItem(items[i]).result > 0 && Pickit.checkItem(items[i]).result < 4) || Cubing.keepItem(items[i]) || Runewords.keepItem(items[i]) || CraftingSystem.keepItem(items[i]);
+
+				// Don't stash low tier autoequip items.
+				if (Config.AutoEquip && Pickit.checkItem(items[i]).result === 1) {
+					tier = NTIP.GetTier(items[i]);
+					bodyLoc = Item.getBodyLoc(items[i]);
+
+					if (tier > 0 && tier <= Item.getEquippedItem(bodyLoc).tier) {
+						result = false;
+					}
+				}
+
+				if (result) {
+					Misc.itemLogger("Stashed", items[i]);
+					Storage.Stash.MoveTo(items[i]);
+				}
+			}
+		}
+	}
+
+	// Stash gold
+	if (stashGold) {
+		if (me.getStat(14) >= Config.StashGold && me.getStat(15) < 25e5 && this.openStash()) {
+			gold(me.getStat(14), 3);
+			delay(1000); // allow UI to initialize
+			me.cancel();
+		}
+	}
+
+	return true;
+};
