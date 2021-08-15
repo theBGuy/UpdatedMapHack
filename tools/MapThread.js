@@ -3118,6 +3118,12 @@ function main() {
 			}
 
 			break;
+		case "pick":
+			qolObj.type = "qol";
+			qolObj.action = "pickItems";
+			scriptBroadcast(JSON.stringify(qolObj));
+
+			break;
 		case "drop":
 			if (msgList.length < 3) {
 				print("ÿc1Missing arguments");
@@ -3144,6 +3150,7 @@ function main() {
 			print("ÿc4.useraddon       ÿc0Toggles useraddon mode");
 			print("ÿc4.me                   ÿc0Displays Character level, Area, and x/y coordinates");
 			print("ÿc4.stash               ÿc0Calls Town.stash() to stash items/gold from inventory");
+			print("ÿc4.pick                ÿc0Pick items from the ground to inventory");
 			print("ÿc4.hide                 ÿc0Hide this console");
 			print("ÿc4.help                 ÿc0Show this console");
 			print("ÿc4.commands      ÿc0Show this console");

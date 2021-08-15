@@ -76,7 +76,7 @@ function main() {
 							}
 						} else if (obj.dest === 103) {
 							Pather.moveTo(17581, 8070);
-							
+
 							for (let i = 0; i < 3; i++) {
 								if (Pather.useUnit(2, 342, 103)) {
 									break;
@@ -508,6 +508,33 @@ function main() {
 							}
 
 							break;
+						case "pickItems":
+							let item = getUnit(4, -1, 3), items = [],
+								cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
+
+							for (let i = 0; i < cancelFlags.length; i++) {
+								if (getUIFlag(cancelFlags[i])) {
+									me.cancel();
+								}
+							}
+
+							if (item) {
+								do {
+									items.push(copyUnit(item));
+								} while (item.getNext());
+							}
+
+							while (items.length > 0) {
+								items.sort(sortPickList);
+
+								item = items.shift();
+
+								if (Town.ignoredItemTypes.indexOf(item.itemType) === -1 && Storage.Inventory.CanFit(item)) {
+									Pickit.pickItem(item);
+								}
+							}
+
+							break;
 						}
 
 						break;
@@ -522,6 +549,16 @@ function main() {
 
 		delay(20);
 	}
+}
+
+function sortPickList(a, b) {
+	// Same size - sort by distance
+	if (b.sizex === a.sizex && b.sizey === a.sizey) {
+		return getDistance(me, a) - getDistance(me, b);
+
+	}
+	
+	return b.sizex * b.sizey - a.sizex * a.sizey;
 }
 
 Pather.stop = false;
