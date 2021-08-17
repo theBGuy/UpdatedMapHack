@@ -1056,6 +1056,7 @@ var Hooks = {
 		enabled: true,
 		frameYSizeScale: 0,
 		frameYLocScale: 0,
+		displayTitle: true,
 
 		getScale: function () {
 			switch (me.area) {
@@ -1218,6 +1219,10 @@ var Hooks = {
 
 			if (!this.getHook("credits")) {
 				this.add("credits");
+			}
+
+			if (!this.getHook("title") && this.displayTitle) {
+				this.add("title");
 			}
 
 			if (!this.getHook("dashboard")) {
@@ -1478,6 +1483,13 @@ var Hooks = {
 				this.hooks.push({
 					name: "credits",
 					hook: new Text("MH by theBGuy", 0, 600 + Hooks.resfixY, 4, 0, 0)
+				});
+
+				break;
+			case "title":
+				this.hooks.push({
+					name: "title",
+					hook: new Text(":: Welcome to MapHack, enter .help to see more commands ::", 400, 25, 4, 0, 2)
 				});
 
 				break;
@@ -3125,12 +3137,16 @@ function main() {
 
 			break;
 		case "drop":
-			if (msgList.length < 3) {
+			if (msgList.length < 2) {
 				print("ÿc1Missing arguments");
 				break;
 			}
 
-			switch (msgList[1].toLowerCase()) {
+			qolObj.type = "drop";
+			qolObj.action = msgList[1].toLowerCase();
+			scriptBroadcast(JSON.stringify(qolObj));
+
+			/*switch (msgList[1].toLowerCase()) {
 			case "gold":
 				if (typeof msgList[2] === 'number') {
 
@@ -3139,10 +3155,9 @@ function main() {
 				}
 
 				break;
-			}
+			}*/
 
 			break;
-		case "commands":
 		case "help":
 			showConsole();
 			print("ÿc9Start Help -------------------------------------------------------------/");
@@ -3151,18 +3166,19 @@ function main() {
 			print("ÿc4.me                   ÿc0Displays Character level, Area, and x/y coordinates");
 			print("ÿc4.stash               ÿc0Calls Town.stash() to stash items/gold from inventory");
 			print("ÿc4.pick                ÿc0Pick items from the ground to inventory");
-			print("ÿc4.hide                 ÿc0Hide this console");
+			print("ÿc4.hide                 ÿc0Hide this console and remove title message");
 			print("ÿc4.help                 ÿc0Show this console");
-			print("ÿc4.commands      ÿc0Show this console");
-			print("ÿc1End Chat Commands");
+			print("ÿc4.drop invo                 ÿc0Drop all items in the inventory");
+			print("ÿc4.drop stash                 ÿc0Drop all items in the stash excluding the cube");
 			print("ÿc2Key Commands:");
 			print("ÿc4Alt Key   ÿc0Hover over an item then press Alt to move that item from one area to the next. In example Stash to Inventory");
-			print("ÿc1End Key Commands");
+			print("ÿc4Esc Key   ÿc0Exit this console");
 			print("ÿc1End Help ---------------------------------------------------------------/");
 
 			break;
 		case "hide":
 			hideConsole();
+			Hooks.text.displayTitle = false;
 
 			break;
 		default:
@@ -3182,10 +3198,6 @@ function main() {
 	while (true) {
 		while (!me.area || !me.gameReady) {
 			delay(100);
-		}
-
-		if (getTickCount() - me.gamestarttime < 1000) {
-			me.overhead("Welome to theBGuy's Maphack, for extra commands enter .help or .commands");
 		}
 
 		this.revealArea(me.area);

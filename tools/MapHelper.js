@@ -538,6 +538,48 @@ function main() {
 						}
 
 						break;
+					case "drop":
+						let item;
+
+						switch (obj.action) {
+						case "invo":
+							let invo = me.findItems(-1, 0, 3);
+
+							if (invo) {
+								while (invo.length > 0) {
+									item = invo.shift();
+									item.drop();
+								}
+							}
+
+							me.cancel();
+
+							break;
+						case "stash":
+							if (!me.inTown || !Town.openStash()) {
+								me.overhead("Failed to open stash");
+
+								break;
+							}
+
+							let stash = me.findItems(-1, 0, 7);
+
+							if (stash) {
+								while (stash.length > 0) {
+									item = stash.shift();
+
+									if (item.classid !== 549) { // Don't drop the cube
+										item.drop();
+									}
+								}
+							}
+
+							me.cancel();
+
+							break;
+						}
+
+						break;
 					}
 				}
 			} catch (e) {
