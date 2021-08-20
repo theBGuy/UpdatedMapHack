@@ -666,10 +666,10 @@ var Hooks = {
 				if (item.name) {
 					if (item.quality === 4) {
 						color = 0x97;
-						code = "ÿc3" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";
+						code = "ÿc3" + (item.getFlag(0x400000) ? "Eth: " : "") + (item.getStat(194) > 0 ? "[" + item.getStat(194) + "]" : "");
 					} else {
 						color = 0x6F;
-						code = "ÿc9" + (item.getFlag(0x400000) ? "Eth: " : "") + "[" + item.getStat(194) + "]";	
+						code = "ÿc9" + (item.getFlag(0x400000) ? "Eth: " : "") + (item.getStat(194) > 0 ? "[" + item.getStat(194) + "]" : "");	
 					}
 					
 					let abbr = item.name.split(" ");
@@ -794,7 +794,6 @@ var Hooks = {
 			for (i = 0; i < this.hooks.length; i += 1) {
 				if (!copyUnit(this.hooks[i].unit).x) {
 					this.hooks[i].hook[0].remove();
-					this.hooks[i].hook[1].remove();
 					this.hooks.splice(i, 1);
 
 					i -= 1;
@@ -821,10 +820,47 @@ var Hooks = {
 		newHook: function (unit) {
 			var arr = [];
 
-			arr.push(new Line(unit.x - 5, unit.y, unit.x + 5, unit.y, (unit.spectype & 0xF) ? 0x68 : 0x62, true));
-			arr.push(new Line(unit.x, unit.y - 5, unit.x, unit.y + 5, (unit.spectype & 0xF) ? 0x68 : 0x62, true));
+			if (unit.spectype & 0xF) {
+				arr.push(new Text("O", unit.x, unit.y, this.specTypeColor(unit), 1, null, true));
+			} else {
+				arr.push(new Text("X", unit.x, unit.y, this.specTypeColor(unit), 1, null, true));
+			}
 
 			return arr;
+		},
+
+		// credit DetectiveSquirrel from his maphack https://github.com/DetectiveSquirrel/Kolbot-MapThread/blob/9c721a72a934518cfca1d1a05211b5e03b5b624f/kolbot/tools/MapThread.js#L2353
+		specTypeColor: function (unit) {
+			var UnitSpecType 			= unit.spectype,
+				UniqueBossSpecType 		= 0x04,
+				UniqueQuestModSpecType 	= 0x05,
+				MagicSpecType		 	= 0x06,
+				BossMinionSpecType		= 0x08;
+
+			switch (UnitSpecType) {
+				case BossMinionSpecType:
+					return 3;
+					
+					break;
+				case MagicSpecType:
+					return 9;
+					
+					break;
+				case UniqueBossSpecType:
+					return 11;
+
+					break;
+				case UniqueQuestModSpecType:
+					return 2;
+
+					break;
+				default:
+					return 8;
+
+					break;
+			}
+
+			return false;
 		},
 
 		add: function (unit) {
@@ -841,14 +877,8 @@ var Hooks = {
 				return false;
 			}
 
-			hook[0].x = unit.x - 5;
-			hook[0].x2 = unit.x + 5;
+			hook[0].x = unit.x;
 			hook[0].y = unit.y;
-			hook[0].y2 = unit.y;
-			hook[1].x = unit.x;
-			hook[1].x2 = unit.x;
-			hook[1].y = unit.y - 5;
-			hook[1].y2 = unit.y + 5;
 
 			return true;
 		},
@@ -871,7 +901,6 @@ var Hooks = {
 			for (i = 0; i < this.hooks.length; i += 1) {
 				if (this.hooks[i].unit.gid === unit.gid) {
 					this.hooks[i].hook[0].remove();
-					this.hooks[i].hook[1].remove();
 					this.hooks.splice(i, 1);
 
 					return true;
@@ -884,7 +913,6 @@ var Hooks = {
 		flush: function () {
 			while (this.hooks.length) {
 				this.hooks[0].hook[0].remove();
-				this.hooks[0].hook[1].remove();
 				this.hooks.shift();
 			}
 		}
@@ -1795,13 +1823,23 @@ var Hooks = {
 				name = "Smith";
 
 				break;
+			case 33: // BoneAsh
+				unit = {x: 20047, y: 4898};
+				name = "BoneAsh";
+
+				break;
 			case 37: // Andariel
 				unit = {x: 22549, y: 9520};
 				name = "Andariel";
 
 				break;
 			case 38: // Griswold
-				unit = getPresetUnit(me.area, 2, 26);
+				if (getUnit(1, 365)) {
+					unit = getUnit(1, 365);
+				} else {
+					unit = {x: 25163, y: 5170};
+				}
+
 				name = "Griswold";
 
 				break;
