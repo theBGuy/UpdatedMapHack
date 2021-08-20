@@ -241,6 +241,11 @@ function main() {
 						Pather.getWP(me.area);
 
 						break;
+					case "npc":
+						print("Going to act: " + obj.dest);
+						Pather.changeAct(obj.dest);
+
+						break;
 					case "portal":
 						if (obj.dest === 132 && getUnit(1, 543)) {
 							me.overhead("Can't enter Worldstone Chamber yet. Baal still in area");
@@ -447,6 +452,15 @@ function main() {
 							Town.stash(true, true);
 
 							break;
+						case "cowportal":
+							openCowPortal(39);
+
+							break;
+						case "filltps":
+							Town.fillTome(518);
+							me.cancel();
+
+							break;
 						case "moveItemFromInvoToStash":
 						case "moveItemFromStashToInvo":
 							unit = getUnit(101);
@@ -602,6 +616,118 @@ function sortPickList(a, b) {
 	
 	return b.sizex * b.sizey - a.sizex * a.sizey;
 }
+
+function openCowPortal (portalID) {
+	this.getTome = function () {
+		let tome,
+			myTome = me.findItem("tbk", 0, 3),
+			akara = Town.initNPC("Shop", "buyTome");
+
+		tome = me.getItem("tbk");
+
+		if (tome) {
+			do {
+				if (!myTome || tome.gid !== myTome.gid) {
+					return copyUnit(tome);
+				}
+			} while (tome.getNext());
+		}
+
+		if (!akara) {
+			print("Failed to buy tome");
+		}
+
+		tome = akara.getItem("tbk");
+
+		if (tome.buy()) {
+			tome = me.getItem("tbk");
+
+			if (tome) {
+				do {
+					if (!myTome || tome.gid !== myTome.gid) {
+						return copyUnit(tome);
+					}
+				} while (tome.getNext());
+			}
+		}
+
+		print("Failed to buy tome");
+
+		return false;
+	};
+
+	if (me.area !== 1) {
+		Town.goToTown(1);
+	}
+
+	if (Pather.getPortal(39)) {
+		me.overhead("Portal already opened");
+
+		return false;
+	}
+
+	let leg = me.getItem(88);
+
+	if (!leg) {
+		me.overhead("Missing leg");
+
+		return false;
+	}
+
+	let tome = this.getTome();
+
+	if (!tome) {
+		me.overhead("Missing tome");
+
+		return false;
+	}
+
+	if (!Town.openStash()) {
+		print('Failed to open stash. (openCowPortal)');
+
+		return false;
+	}
+
+	if (!Cubing.emptyCube()) {
+		print('Failed to empty cube. (openCowPortal)');
+
+		return false;
+	}
+
+	let cubingItem, classIDS = [88, 518];
+
+	for (let classID of classIDS) {
+		cubingItem = me.getItem(classID);
+
+		if (!cubingItem || !Storage.Cube.MoveTo(cubingItem)) {
+			return false;
+		}
+	}
+
+	while (!Cubing.openCube()) {
+		delay(1 + me.ping * 2);
+		Packet.flash(me.gid);
+	}
+
+	let cowPortal;
+	let tick = getTickCount();
+
+	while (getTickCount() - tick < 5000) {
+		if (Cubing.openCube()) {
+			transmute();
+			delay(750 + me.ping);
+			cowPortal = Pather.getPortal(portalID);
+
+			if (cowPortal) {
+				break;
+			}
+		}
+	}
+
+	me.cancel();
+
+	return true;
+};
 
 Pather.stop = false;
 
@@ -780,7 +906,144 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 	removeEventListener("keyup", Pather.stopEvent);
 
 	return getDistance(me, node.x, node.y) < 5;
-}
+};
+
+Pather.getWP = function (area, clearPath) {
+	var i, j, wp, preset,
+		wpIDs = [119, 145, 156, 157, 237, 238, 288, 323, 324, 398, 402, 429, 494, 496, 511, 539];
+
+	if (area !== me.area) {
+		this.journeyTo(area);
+	}
+
+	for (i = 0; i < wpIDs.length; i += 1) {
+		preset = getPresetUnit(area, 2, wpIDs[i]);
+
+		if (preset) {
+			this.moveToUnit(preset, 0, 0, clearPath);
+
+			wp = getUnit(2, "waypoint");
+
+			if (wp) {
+				for (j = 0; j < 10; j += 1) {
+					Misc.click(0, 0, wp);
+
+					if (getUIFlag(0x14)) {
+						delay(500);
+
+						if (me.inTown) {
+							return true;	// Keep wp menu open in town
+						}
+
+						me.cancel();
+
+						return true;
+					}
+
+					delay(500);
+				}
+			}
+		}
+	}
+
+	return false;
+};
+
+Pather.changeAct = function (act) {
+	let npc;
+	let loc;
+
+	switch (act) {
+	case 1:
+		npc = "warriv";
+		loc = 1;
+
+		Town.move(NPC.Warriv);
+
+		break;
+	case 2:
+		switch (me.act) {
+		case 1:
+			npc = "warriv";
+			loc = 40;
+
+			if (!Misc.checkQuest(6, 0)) {
+				me.overhead('Incomplete Quest');
+				return false;
+			}
+
+			Town.move(NPC.Warriv);
+			
+			break;
+		case 3:
+			npc = "meshif";
+			loc = 40;
+
+			Town.move(NPC.Meshif);
+			
+			break;
+		}
+
+		break;
+	case 3:
+		npc = "meshif";
+		loc = 75;
+
+		if (!Misc.checkQuest(22, 0)) {
+			me.overhead('Incomplete Quest');
+			return false;
+		}
+
+		Town.move(NPC.Meshif);
+
+		break;
+	case 5:
+		npc = "tyrael";
+		loc = 109;
+
+		if (!Misc.checkQuest(26, 0)) {
+			me.overhead('Incomplete Quest');
+			return false;
+		}
+
+		Town.move(NPC.Tyrael);
+
+		break;
+	}
+
+	let npcUnit = getUnit(1, npc);
+	let timeout = getTickCount() + 3000;
+
+	while (!npcUnit && timeout < getTickCount()) {
+		Town.move(npc);
+		Packet.flash(me.gid);
+		delay(me.ping * 2 + 100);
+		npcUnit = getUnit(1, npc);
+	}
+
+	if (npcUnit) {
+		for (let i = 0; i < 5; i += 1) {
+			sendPacket(1, 56, 4, 0, 4, npcUnit.gid, 4, loc);
+			delay(500 + me.ping);
+
+			if (me.act === act) {
+				break;
+			}
+		}
+	} else {
+		print('Failed to move to ' + npc);
+		me.overhead('Failed to move to ' + npc);
+	}
+
+	return me.act === act;
+};
+
+Misc.checkQuest = function (id, state) {
+	sendPacket(1, 0x40);
+	delay(500 + me.ping);
+
+	return me.getQuest(id, state);
+};
 
 Town.stash = function (stashGold, force) {
 	if (stashGold === undefined) {

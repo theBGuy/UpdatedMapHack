@@ -1088,7 +1088,6 @@ var Hooks = {
 
 		getScale: function () {
 			switch (me.area) {
-			case 1:
 			case 75:
 			case 103:
 			case 8:
@@ -1203,11 +1202,11 @@ var Hooks = {
 				this.frameYSizeScale = -20;
 				this.frameYLocScale = 20;
 				break;
+			case 1:
 			case 2:
 			case 4:
 			case 5:
 			case 17:
-			case 40:
 			case 42:
 			case 43:
 			case 44:
@@ -1223,6 +1222,7 @@ var Hooks = {
 				this.frameYSizeScale = -10;
 				this.frameYLocScale = 10;
 				break;
+			case 40:
 			case 76:
 			case 78:
 			case 80:
@@ -2159,6 +2159,12 @@ var Hooks = {
 					break;
 				case 102: // Numpad 6
 					switch (me.area) {
+					case 1:
+					case 40:
+					case 103:
+						hook = this.getHook("Next Act");
+						obj.type = "npc";
+						break;
 					case 76:
 						hook = this.getHook("Great Marsh");
 						obj.type = "area";
@@ -2183,14 +2189,20 @@ var Hooks = {
 
 					break;
 				case 103: // Numpad 7
-					if (me.area === 108) {
+					switch (me.area) {
+					case 40:
+					case 75:
+						hook = this.getHook("Previous Act");
+						obj.type = "npc";
+						break;
+					case 108:
 						hook = this.getHook("Infector Seal");
 						obj.type = "unit";
-					}
-
-					if (me.area === 109) {
+						break;
+					case 109:
 						hook = this.getPortalHook("Furnace");
-						obj.type = "portal";	
+						obj.type = "portal";
+						break;	
 					}
 					
 					break;
@@ -2234,6 +2246,49 @@ var Hooks = {
 
 			if (me.area === 46) {
 				nextAreas[46] = getRoom().correcttomb;
+			}
+
+			if (me.inTown) {
+				switch (me.area) {
+				case 1:
+					this.hooks.push({
+						name: "Next Act",
+						destination: 2,
+						hook: new Text("ÿc7Num 6: " + Pather.getAreaName(40), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 40:
+					this.hooks.push({
+						name: "Previous Act",
+						destination: 1,
+						hook: new Text("ÿc8Num 7: " + Pather.getAreaName(1), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					this.hooks.push({
+						name: "Next Act",
+						destination: 3,
+						hook: new Text("ÿc7Num 6: " + Pather.getAreaName(75), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 75:
+					this.hooks.push({
+						name: "Previous Act",
+						destination: 2,
+						hook: new Text("ÿc8Num 7: " + Pather.getAreaName(40), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				case 103:
+					this.hooks.push({
+						name: "Next Act",
+						destination: 5,
+						hook: new Text("ÿc7Num 6: " + Pather.getAreaName(109), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+					});
+
+					break;
+				}
 			}
 
 			switch (me.area) {
@@ -2335,6 +2390,16 @@ var Hooks = {
 				}
 
 				break;
+			}
+
+			let cowPortal = me.area === 1 ? getUnit(2, 60) : false;
+
+			if (cowPortal && cowPortal.objtype === 39) {
+				this.hooks.push({
+					name: "Moo Moo Farm",
+					destination: 39,
+					hook: new Text("ÿc<Num 5: " + Pather.getAreaName(39), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
+				});
 			}
 
 			switch (me.area) {
@@ -2507,16 +2572,6 @@ var Hooks = {
 					name: "POI",
 					destination: {x: poi.x, y: poi.y},
 					hook: new Text("ÿc<Num 3: " + poi.name, 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
-				});
-			}
-
-			let cowPortal = me.area === 1 ? getUnit(2, 60) : false;
-
-			if (cowPortal && cowPortal.objtype === 39) {
-				this.hooks.push({
-					name: "Moo Moo Farm",
-					destination: 39,
-					hook: new Text("ÿc<Num 5: " + Pather.getAreaName(39), 200 + Hooks.lowerLeftResfixX, 545 - (this.hooks.length * 10) + Hooks.resfixY)
 				});
 			}
 
@@ -3174,6 +3229,18 @@ function main() {
 			scriptBroadcast(JSON.stringify(qolObj));
 
 			break;
+		case "cowportal":
+			qolObj.type = "qol";
+			qolObj.action = "cowportal";
+			scriptBroadcast(JSON.stringify(qolObj));
+
+			break;
+		case "filltps":
+			qolObj.type = "qol";
+			qolObj.action = "filltps";
+			scriptBroadcast(JSON.stringify(qolObj));
+
+			break;
 		case "drop":
 			if (msgList.length < 2) {
 				print("ÿc1Missing arguments");
@@ -3205,9 +3272,10 @@ function main() {
 			print("ÿc4.stash               ÿc0Calls Town.stash() to stash items/gold from inventory");
 			print("ÿc4.pick                ÿc0Pick items from the ground to inventory");
 			print("ÿc4.hide                 ÿc0Hide this console and remove title message");
-			print("ÿc4.help                 ÿc0Show this console");
-			print("ÿc4.drop invo                 ÿc0Drop all items in the inventory");
-			print("ÿc4.drop stash                 ÿc0Drop all items in the stash excluding the cube");
+			print("ÿc4.drop invo             ÿc0Drop all items in the inventory");
+			print("ÿc4.drop stash             ÿc0Drop all items in the stash excluding the cube");
+			print("ÿc4.cowportal              ÿc0Make cow portal as long as bot already has leg");
+			print("ÿc4.filltps                 ÿc0Fill tp tome");
 			print("ÿc2Key Commands:");
 			print("ÿc4Alt Key   ÿc0Hover over an item then press Alt to move that item from one area to the next. In example Stash to Inventory");
 			print("ÿc4Esc Key   ÿc0Exit this console");
