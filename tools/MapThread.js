@@ -2966,7 +2966,7 @@ function main() {
 	};
 
 	this.getOnScreenLocation = function () {
-		let possibleLocs = [0x17, 0x19, 0x1A];
+		let possibleLocs = [0x17, 0x19, 0x1A, 0x0C];
 
 		for (let i = 0; i < possibleLocs.length; i++) {
 			if (getUIFlag(possibleLocs[i])) {
@@ -2974,7 +2974,7 @@ function main() {
 			}
 		}
 
-		return false;
+		return -1;
 	};
 
 	this.keyEvent = function (key) {
@@ -2985,7 +2985,7 @@ function main() {
 			};
 
 		switch (key) {
-		case 17: // Alt
+		case 17: // Ctrl
 			let unit = getUnit(101);
 
 			switch (this.getOnScreenLocation()) {
@@ -3043,6 +3043,14 @@ function main() {
 
 						break;
 					}
+				}
+
+				break;
+			case 3: // Shop
+				if (!!unit) {
+					qolObj.type = "qol";
+					qolObj.action = "sellItem";
+					scriptBroadcast(JSON.stringify(qolObj));
 				}
 
 				break;

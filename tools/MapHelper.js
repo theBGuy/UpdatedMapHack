@@ -439,6 +439,7 @@ function main() {
 						break;
 					case "qol":
 						let unit;
+
 						switch (obj.action) {
 						case "heal":
 							Town.initNPC("Heal", "heal");
@@ -545,6 +546,18 @@ function main() {
 
 								if (Town.ignoredItemTypes.indexOf(item.itemType) === -1 && Storage.Inventory.CanFit(item)) {
 									Pickit.pickItem(item);
+								}
+							}
+
+							break;
+						case "sellItem":
+							unit = getUnit(101);
+
+							if (unit.location === 3 && Town.questItemClassids.indexOf(unit.classid) === -1 && Town.unsellablesClassids.indexOf(unit.classid) === -1) {
+								try {
+									unit.sell();
+								} catch (e) {
+									print(e);
 								}
 							}
 
@@ -1044,6 +1057,9 @@ Misc.checkQuest = function (id, state) {
 
 	return me.getQuest(id, state);
 };
+
+Town.questItemClassids = [87, 88, 89, 90, 91, 92, 173, 174, 521, 524, 525, 545, 546, 547, 548, 549, 552, 553, 554, 555, 644];
+Town.unsellablesClassids = [647, 648, 649, 650, 651, 652, 653, 654, 655, 656, 657, 658];
 
 Town.stash = function (stashGold, force) {
 	if (stashGold === undefined) {
