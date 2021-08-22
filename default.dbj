@@ -34,7 +34,7 @@ function main () {
 		delay(50);
 	}
 
-	clearAllEvents() // remove any event listeners from game crash
+	clearAllEvents(); // remove any event listeners from game crash
 
 	if (!getScript("tools/heartbeat.js")) {
 		load("tools/heartbeat.js");
@@ -42,7 +42,13 @@ function main () {
 
 	if (getScript("d2botmap.dbj")) {
 		load("tools/mapthread.js");
-		load("tools/maptoolsthread.js");
+
+		if (FileTools.exists("tools/maptoolsthread.js")) {
+			load("tools/maptoolsthread.js");
+		} else {
+			load("tools/ToolsThread.js");
+		}
+
 		Config.init(true);
 		LocalChat.init();
 
@@ -71,7 +77,7 @@ function main () {
 	if (getScript("D2BotDropper.dbj") || getScript("D2BotMule.dbj") || getScript("D2BotDrop.dbj")) {
 		while(true) {
 			try {
-				if (me.area === 2) {
+				if (me.gameReady && me.ingame && !me.inTown) {
 					D2Bot.printToConsole("Saved from suicide walk!");
 					D2Bot.restart();
 				}
@@ -200,12 +206,20 @@ function main () {
 		}
 
 		load("libs/SoloLeveling/Tools/ToolsThread.js");
+
+		if (Config.TownCheck || Config.TownHP || Config.TownMP) {
+			if (FileTools.exists("libs/SoloLeveling/Tools/TownChicken.js")) {
+				load("libs/SoloLeveling/Tools/TownChicken.js");
+			} else {
+				load("tools/TownChicken.js");
+			}
+		}
 	} else {
 		load("tools/ToolsThread.js");
-	}
 
-	if (Config.TownCheck || Config.TownHP || Config.TownMP) {
-		load("tools/TownChicken.js");
+		if (Config.TownCheck || Config.TownHP || Config.TownMP) {
+			load("tools/TownChicken.js");
+		}
 	}
 
 	if (Config.PublicMode) {
