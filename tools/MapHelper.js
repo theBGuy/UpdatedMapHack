@@ -457,6 +457,10 @@ function main() {
 							openCowPortal(39);
 
 							break;
+						case "uberportal":
+							uberPortals();
+
+							break;
 						case "filltps":
 							Town.fillTome(518);
 							me.cancel();
@@ -738,6 +742,91 @@ function openCowPortal (portalID) {
 	}
 
 	me.cancel();
+
+	return true;
+};
+
+function uberPortals () {
+	let tkeys = me.findItems("pk1", 0).length || 0;
+	let hkeys = me.findItems("pk2", 0).length || 0;
+	let dkeys = me.findItems("pk3", 0).length || 0;
+	let brains = me.findItems("mbr", 0).length || 0;
+	let eyes = me.findItems("bey", 0).length || 0;
+	let horns = me.findItems("dhn", 0).length || 0;
+
+	// End the script if we don't have enough keys nor organs
+	if ((tkeys < 3 || hkeys < 3 || dkeys < 3) && (brains < 1 || eyes < 1 || horns < 1)) {
+		me.overhead("Not enough keys or organs.");
+
+		return false;
+	}
+
+	if (!Pather.accessToAct(5)) {
+		me.overhead("No access to act 5");
+
+		return false;
+	}
+
+	if (me.area !== 109) {
+		Town.goToTown(5);
+	}
+
+	let key1 = me.findItem("pk1", 0);
+	let key2 = me.findItem("pk2", 0);
+	let key3 = me.findItem("pk3", 0);
+	let org1 = me.findItem("mbr", 0);
+	let org2 = me.findItem("mbr", 0);
+	let org3 = me.findItem("mbr", 0);
+
+	if (!!org1 && !!org2 && !!org3) {
+		Town.move("stash");
+
+		if (Pather.getPortal(136)) {
+			me.overhead("Uber tristram already made");
+			return false;
+		}
+
+		if (Town.openStash() && Cubing.emptyCube()) {
+			if (!Storage.Cube.MoveTo(org1) || !Storage.Cube.MoveTo(org2) || !Storage.Cube.MoveTo(org3)) {
+				return false;
+			}
+
+			if (!Cubing.openCube()) {
+				return false;
+			}
+
+			transmute();
+			delay(1000);
+		}
+		
+		return true;
+	}
+
+	if (!!key1 && !!key2 && !!key3) {
+		Town.move("stash");
+
+		if (Pather.getPortal(133) && Pather.getPortal(134) && Pather.getPortal(135)) {
+			me.overhead("All portals already made");
+			return false;
+		}
+
+		if (!portal) {
+			if (Town.openStash() && Cubing.emptyCube()) {
+				if (!Storage.Cube.MoveTo(key1) || !Storage.Cube.MoveTo(key2) || !Storage.Cube.MoveTo(key3)) {
+					return false;
+				}
+
+				if (!Cubing.openCube()) {
+					return false;
+				}
+
+				transmute();
+				delay(1000);
+			}
+		}
+
+		return true;
+	}
 
 	return true;
 };

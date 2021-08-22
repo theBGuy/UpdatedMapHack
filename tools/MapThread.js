@@ -2953,6 +2953,8 @@ function main() {
 	var i,
 		hideFlags = [0x09, 0x0C, 0x01, 0x02, 0x03, 0x04, 0x0F, 0x17, 0x18, 0x19, 0x1A, 0x21, 0x05, 0x14, 0x24];
 
+	let help = new helpMenu();
+
 	this.revealArea = function (area) {
 		if (!this.revealedAreas) {
 			this.revealedAreas = [];
@@ -3243,6 +3245,12 @@ function main() {
 			scriptBroadcast(JSON.stringify(qolObj));
 
 			break;
+		case "uberportal":
+			qolObj.type = "qol";
+			qolObj.action = "uberportal";
+			scriptBroadcast(JSON.stringify(qolObj));
+
+			break;
 		case "filltps":
 			qolObj.type = "qol";
 			qolObj.action = "filltps";
@@ -3272,27 +3280,15 @@ function main() {
 
 			break;
 		case "help":
-			showConsole();
-			print("ÿc9Start Help -------------------------------------------------------------/");
-			print("ÿc2Chat Commands:");
-			print("ÿc4.useraddon       ÿc0Toggles useraddon mode");
-			print("ÿc4.me                   ÿc0Displays Character level, Area, and x/y coordinates");
-			print("ÿc4.stash               ÿc0Calls Town.stash() to stash items/gold from inventory");
-			print("ÿc4.pick                ÿc0Pick items from the ground to inventory");
-			print("ÿc4.hide                 ÿc0Hide this console and remove title message");
-			print("ÿc4.drop invo             ÿc0Drop all items in the inventory");
-			print("ÿc4.drop stash             ÿc0Drop all items in the stash excluding the cube");
-			print("ÿc4.cowportal              ÿc0Make cow portal as long as bot already has leg");
-			print("ÿc4.filltps                 ÿc0Fill tp tome");
-			print("ÿc2Key Commands:");
-			print("ÿc4Alt Key   ÿc0Hover over an item then press Alt to move that item from one area to the next. In example Stash to Inventory");
-			print("ÿc4Esc Key   ÿc0Exit this console");
-			print("ÿc1End Help ---------------------------------------------------------------/");
+			if (help.cleared) {
+				help.showMenu();
+			}
 
 			break;
 		case "hide":
 			hideConsole();
-			Hooks.text.displayTitle = false;
+			//Hooks.text.displayTitle = false;
+			help.hideMenu();
 
 			break;
 		default:
@@ -3357,6 +3353,147 @@ function main() {
 			Hooks.items.flush();
 		}
 	}
+}
+
+function helpMenu() {
+	let hooks = [];
+	let box = [];
+	this.cleared = true;
+	let helpBoxX = 715 + (me.screensize ? 0 : -160);
+	let helpBoxY = 88 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename) + Number(!!me.gameserverip && !me.realm));
+	let helpBoxTextX = 647 + (me.screensize ? 0 : -160);
+	let helpBoxTextY = 88 + 16 * (Number(!!me.diff) + Number(!!me.gamepassword) + Number(!!me.gametype) + Number(!!me.gamename) + Number(!!me.gameserverip && !me.realm)) + 15;
+
+	function hookHandler (click, x, y) {
+		// Get the hook closest to the clicked location
+		function sortHooks(h1, h2) {
+			return Math.abs(h1.y - y) - Math.abs(h2.y - y);
+		}
+
+		// Left click
+		if (click === 0) {
+			// Sort hooks
+			hooks.sort(sortHooks);
+
+			let cmd = hooks[0].text.split(" ")[0].split(".")[1];
+			let msgList = hooks[0].text.split(" ");
+
+			if (!hooks[0].text.includes(".")) {
+				cmd = hooks[0].text.split(" ")[1];
+			}
+
+			switch (cmd) {
+			case "me":
+				me.overhead("Displays Character level, Area, and x/y coordinates");
+
+				break;
+			case "pick":
+				me.overhead("Pick items from the ground to inventory");
+
+				break;
+			case "hide":
+				me.overhead("Hide this menu");
+
+				break;
+			case "stash":
+				me.overhead("Calls Town.stash() to stash items/gold from inventory");
+
+				break;
+			case "filltps":
+				me.overhead("Fill tp tome");
+
+				break;
+			case "cowportal":
+				me.overhead("Make cow portal as long as bot already has leg");
+
+				break;
+			case "uberportal":
+				me.overhead("Make uber portal as long as bot already has ingrediants. Whole keyset or whole organ set");
+
+				break;
+			case "useraddon":
+				me.overhead("Toggles useraddon mode");
+
+				break;
+			case "drop":
+				switch (msgList[1]) {
+					case "invo":
+						me.overhead("Drop all items in the inventory");
+
+						break;
+					case "stash":
+						me.overhead("Drop all items in the stash excluding the cube");
+
+						break;
+				}
+
+				break;
+			case "Ctrl":
+				me.overhead("Hover over an item then press Ctrl to move that item from one area to the next. In example: Stash to Inventory, Cube to Inventory, Inventory to TradeScreen, or Inventory to Shop (sellItem)");
+
+				break;
+			default:
+				me.overhead(cmd);
+
+				break;
+			}
+
+			// Block click
+			return true;
+		}
+
+		return false; 
+	}
+
+	function addHook (text) {
+		hooks.push(new Text("ÿc4." + text, helpBoxTextX, helpBoxTextY + 12 * hooks.length, 0, 0, 0, false, hookHandler))
+	}
+
+	this.showMenu = function () {
+		this.cleared = false;
+
+		let commands = [
+			"me",
+			"pick",
+			"hide",
+			"stash",
+			"filltps",
+			"cowportal",
+			"uberportal",
+			"useraddon",
+			"drop invo",
+			"drop stash",
+		];
+
+		box.push(new Box(helpBoxX, helpBoxY, 150, 165, 0x0, 1, 2));
+		box.push(new Frame(helpBoxX, helpBoxY, 150, 165, 2));
+		hooks.push(new Text("ÿc2Chat Commands:", helpBoxTextX, helpBoxTextY, 0, 0, 0));
+
+		for (let i = 0; i < commands.length; i++) {
+			addHook(commands[i]);
+		}
+
+		hooks.push(new Text("ÿc2Key Commands:", helpBoxTextX, helpBoxTextY + 12 * hooks.length, 0, 0, 0));
+		hooks.push(new Text("ÿc4 Ctrl Key", helpBoxTextX, helpBoxTextY + 12 * hooks.length, 0, 0, 0, false, hookHandler))
+	};
+
+	this.hideMenu = function () {
+		let kill;
+
+		this.cleared = true;
+
+		while (hooks.length) {
+			kill = hooks.shift();
+			kill.remove();
+		}
+
+		while (box.length) {
+			kill = box.shift();
+			kill.remove();
+		}
+
+		return;
+	};
 }
 
 function UnitInfo() {
