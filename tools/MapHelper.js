@@ -301,6 +301,7 @@ function main() {
 
 							break;
 						case 74:
+							Pather.moveTo(12692, 5195);
 							redPortal = Pather.getPortal(74);
 
 							if (redPortal) {
