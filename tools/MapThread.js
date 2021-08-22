@@ -1517,7 +1517,7 @@ var Hooks = {
 			case "title":
 				this.hooks.push({
 					name: "title",
-					hook: new Text(":: Welcome to MapHack, enter .help to see more commands ::", 400, 25, 4, 0, 2)
+					hook: new Text(":: Welcome to MapHack, enter .help to see more commands ::", 400 + Hooks.resfixX, 25, 4, 0, 2)
 				});
 
 				break;
