@@ -3316,6 +3316,10 @@ function main() {
 			Hooks.update();
 		} else {
 			Hooks.flush();
+
+			if (!help.cleared) {
+				help.hideMenu();
+			}
 		}
 
 		if ((!getUIFlag(0x01) || !getUIFlag(0x19) || !getUIFlag(0x1A) || !getUIFlag(0x17)) && !Hooks.userAddon) {
@@ -3329,6 +3333,10 @@ function main() {
 		for (i = 0; i < hideFlags.length; i += 1) {
 			while (getUIFlag(hideFlags[i])) {
 				Hooks.flush();
+
+				if (!help.cleared && !getUIFlag(0x05)) {
+					help.hideMenu();
+				}
 
 				if ((getUIFlag(0x01) || getUIFlag(0x19) || getUIFlag(0x1A) || getUIFlag(0x17)) && Hooks.userAddon) {
 					unitInfo = getUnit(101);
