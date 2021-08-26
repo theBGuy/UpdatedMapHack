@@ -3573,6 +3573,7 @@ function main() {
 		case "help":
 			if (help.cleared) {
 				help.showMenu();
+				me.overhead("Click each command for more info");
 			}
 
 			break;
