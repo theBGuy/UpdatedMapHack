@@ -2923,6 +2923,10 @@ function helpMenu() {
 				me.overhead("Hide this menu");
 
 				break;
+			case "clear":
+				me.overhead("Clear title message");
+
+				break;
 			case "stash":
 				me.overhead("Calls Town.stash() to stash items/gold from inventory");
 
@@ -2984,6 +2988,7 @@ function helpMenu() {
 			"me",
 			"pick",
 			"hide",
+			"clear",
 			"stash",
 			"filltps",
 			"cowportal",
@@ -2993,8 +2998,8 @@ function helpMenu() {
 			"drop stash",
 		];
 
-		box.push(new Box(helpBoxX, helpBoxY, 150, 165, 0x0, 1, 2));
-		box.push(new Frame(helpBoxX, helpBoxY, 150, 165, 2));
+		box.push(new Box(helpBoxX, helpBoxY, 150, 65 + (10 * commands.length), 0x0, 1, 2));
+		box.push(new Frame(helpBoxX, helpBoxY, 150, 65 + (10 * commands.length), 2));
 		hooks.push(new Text("ÿc2Chat Commands:", helpBoxTextX, helpBoxTextY, 0, 0, 0));
 
 		for (let i = 0; i < commands.length; i++) {
@@ -3579,8 +3584,11 @@ function main() {
 			break;
 		case "hide":
 			hideConsole();
-			//Hooks.text.displayTitle = false;
 			help.hideMenu();
+
+			break;
+		case "clear":
+			Hooks.text.displayTitle = false;
 
 			break;
 		default:
