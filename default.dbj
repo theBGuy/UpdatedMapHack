@@ -191,28 +191,25 @@ function main () {
 	DataFile.updateStats(["experience", "name"]);
 
 	// Load threads
-	if (getScript("D2BotSoloLevelingEntry.dbj")) {
-		if (!isIncluded("SoloLeveling/Tools/Developer.js")) {
-			include("SoloLeveling/Tools/Developer.js");
+	if (getScript("D2BotSoloPlay.dbj")) {
+		if (!isIncluded("SoloPlay/Tools/Developer.js")) {
+			include("SoloPlay/Tools/Developer.js");
 		}
 
-		if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
-			include("SoloLeveling/Tools/Tracker.js");
+		if (!isIncluded("SoloPlay/Tools/Tracker.js")) {
+			include("SoloPlay/Tools/Tracker.js");
 		}
 
-		if (!isIncluded("libs/SoloLeveling/Functions/Globals.js")) {
-			include("libs/SoloLeveling/Functions/Globals.js");
+		if (!isIncluded("libs/SoloPlay/Functions/Globals.js")) {
+			include("libs/SoloPlay/Functions/Globals.js");
 			SetUp.include();
 		}
 
-		load("libs/SoloLeveling/Tools/ToolsThread.js");
+		load("libs/SoloPlay/Tools/ToolsThread.js");
+		load("libs/SoloPlay/Tools/EventThread.js");
 
 		if (Config.TownCheck || Config.TownHP || Config.TownMP) {
-			if (FileTools.exists("libs/SoloLeveling/Tools/TownChicken.js")) {
-				load("libs/SoloLeveling/Tools/TownChicken.js");
-			} else {
-				load("tools/TownChicken.js");
-			}
+			load("libs/SoloPlay/Tools/TownChicken.js");
 		}
 	} else {
 		load("tools/ToolsThread.js");
