@@ -1,3 +1,5 @@
+# **This repo is outdated, MapMode has been added into https://github.com/blizzhackers/kolbot any new updates will be there**
+
 # What is this?
 This is a completly revamped version of MapHack to be used with kolbot.
 
